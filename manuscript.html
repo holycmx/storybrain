@@ -2,359 +2,362 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Story Brain — Manuscript Editor</title>
-  <!-- Tailwind + Google Fonts + Material Icons -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Story Brain — Smart Manuscript Editor</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <!-- Quill.js for rich text editor (optional, but adds formatting) -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
   <style>
     * { font-family: 'Inter', sans-serif; }
     .font-headline { font-family: 'Epilogue', sans-serif; }
     body { background-color: #FDF9F4; }
-    .serif-editor { font-family: 'Epilogue', serif; }
-    .writing-area:focus { outline: none; }
-    .panel-shadow { box-shadow: 0 4px 20px rgba(0,0,0,0.03), 0 1px 2px rgba(0,0,0,0.05); }
-    .modal-overlay { background-color: rgba(0,0,0,0.4); backdrop-filter: blur(2px); }
-  </style>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#A57982',
-            secondary: '#B98EA7',
-            tertiary: '#590004',
-            neutralBg: '#F0D3F7',
-            surface: '#FFFFFF',
-            surfaceMuted: '#F9F5FC',
-            borderLight: '#EEE6F0'
-          },
-          borderRadius: { 'xl': '1rem', '2xl': '1.25rem' }
-        }
-      }
+    .ql-container { font-size: 18px; font-family: 'Inter', serif; min-height: 500px; }
+    .ql-editor { line-height: 1.8; }
+    @media (max-width: 768px) {
+      .sidebar-mobile { transform: translateX(-100%); transition: transform 0.3s; }
+      .sidebar-mobile.open { transform: translateX(0); }
     }
-  </script>
+  </style>
 </head>
-<body class="bg-[#FDF9F4] text-gray-800 antialiased overflow-hidden h-screen flex flex-col">
+<body class="bg-[#FDF9F4] text-gray-800">
 
-<div class="flex flex-1 min-h-0">
-  <!-- ========== SIDEBAR ========== -->
+<div class="flex min-h-screen">
+  <!-- Sidebar (same as before) -->
   <aside class="fixed left-0 top-0 h-full w-64 bg-white/90 backdrop-blur-sm border-r border-[#E5D5E8] shadow-sm z-50 flex flex-col p-5">
+    <!-- sidebar content same as dashboard -->
     <div class="mb-8 px-2">
       <h1 class="text-2xl font-headline font-extrabold tracking-tight bg-gradient-to-r from-[#A57982] to-[#590004] bg-clip-text text-transparent">Story Brain</h1>
       <p class="text-xs text-gray-500 mt-1">creative workspace</p>
     </div>
- <nav class="flex-1 space-y-1.5">
-  <a href="index.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-[#F3E9F5] transition"><span class="material-symbols-outlined text-[22px]">dashboard</span>Dashboard</a>
-  <a href="manuscript.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium bg-primary/10 text-primary shadow-sm"><span class="material-symbols-outlined text-[22px]">menu_book</span>Manuscript</a>
-  <a href="characters.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-[#F3E9F5] transition"><span class="material-symbols-outlined text-[22px]">group</span>Characters</a>
-  <a href="world.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-[#F3E9F5] transition"><span class="material-symbols-outlined text-[22px]">public</span>World-building</a>
-  <div class="pt-4 mt-2 border-t border-[#EADDF0]"></div>
-  <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-[#F3E9F5] transition"><span class="material-symbols-outlined text-[22px]">archive</span>Archive</a>
-  <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-[#F3E9F5] transition"><span class="material-symbols-outlined text-[22px]">delete</span>Trash</a>
-  <button id="exportBtnSidebar" class="mt-6 w-full bg-primary/20 text-primary font-semibold py-2.5 rounded-xl text-sm hover:bg-primary hover:text-white transition flex items-center justify-center gap-2"><span class="material-symbols-outlined text-[20px]">download</span>Export .txt</button>
-</nav>
+    <nav class="flex-1 space-y-1.5">
+      <a href="index.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-[#F3E9F5] transition"><span class="material-symbols-outlined text-[22px]">dashboard</span>Dashboard</a>
+      <a href="manuscript.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium bg-primary/10 text-primary shadow-sm"><span class="material-symbols-outlined text-[22px]">menu_book</span>Manuscript</a>
+      <a href="characters.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-[#F3E9F5] transition"><span class="material-symbols-outlined text-[22px]">group</span>Characters</a>
+      <a href="world.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-[#F3E9F5] transition"><span class="material-symbols-outlined text-[22px]">public</span>World-building</a>
+      <div class="pt-4 mt-2 border-t border-[#EADDF0]"></div>
+      <a href="archive.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-[#F3E9F5] transition"><span class="material-symbols-outlined text-[22px]">archive</span>Archive</a>
+      <a href="trash.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-[#F3E9F5] transition"><span class="material-symbols-outlined text-[22px]">delete</span>Trash</a>
+      <button id="exportBtnSidebar" class="mt-6 w-full bg-primary/20 text-primary font-semibold py-2.5 rounded-xl text-sm hover:bg-primary hover:text-white transition flex items-center justify-center gap-2"><span class="material-symbols-outlined text-[20px]">download</span>Export</button>
+    </nav>
   </aside>
 
-  <!-- MAIN CONTENT AREA -->
+  <!-- Main Content -->
   <main class="ml-64 flex-1 flex flex-col min-h-0">
-    <!-- Top Bar -->
-    <div class="sticky top-0 z-40 bg-[#FDF9F4]/80 backdrop-blur-md border-b border-[#EADDF0] px-8 py-4 flex justify-between items-center">
-      <div class="flex items-center gap-4">
-        <h2 class="text-2xl font-headline font-bold text-[#2C1E2A]">Manuscript Editor</h2>
-        <div class="h-6 w-px bg-gray-300"></div>
-        <div class="flex items-center gap-2 text-sm text-gray-500">
-          <span class="material-symbols-outlined text-[18px]">edit_note</span>
-          <span id="projectTitleDisplay">No project selected</span>
+    <!-- Top Bar with Smart Tools -->
+    <div class="sticky top-0 z-40 bg-[#FDF9F4]/80 backdrop-blur-md border-b border-[#EADDF0] px-4 md:px-8 py-3 flex flex-wrap justify-between items-center gap-2">
+      <div class="flex items-center gap-2 flex-wrap">
+        <h2 class="text-xl md:text-2xl font-headline font-bold text-[#2C1E2A]">Manuscript Editor</h2>
+        <div class="flex gap-1">
+          <button id="autoSaveToggle" class="p-2 rounded-lg hover:bg-gray-100 text-xs" title="Auto-save on/off">
+            <span class="material-symbols-outlined text-[18px]">autorenew</span>
+          </button>
+          <button id="wordCountGoalBtn" class="p-2 rounded-lg hover:bg-gray-100 text-xs" title="Set daily goal">
+            <span class="material-symbols-outlined text-[18px]">target</span>
+          </button>
+          <button id="revisionHistoryBtn" class="p-2 rounded-lg hover:bg-gray-100 text-xs" title="Revision history">
+            <span class="material-symbols-outlined text-[18px]">history</span>
+          </button>
         </div>
       </div>
-      <div class="flex items-center gap-3">
-        <span class="text-sm text-gray-500 flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">sync</span>Auto-saved</span>
-        <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]">person</span></div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="text-sm text-gray-500"><span id="wordCountDisplay">0</span> words</span>
+        <span class="text-sm text-gray-500">|</span>
+        <span class="text-sm text-gray-500" id="dailyGoalDisplay">Daily: 0/500</span>
+        <span class="text-sm text-gray-500">|</span>
+        <span class="text-sm text-gray-500" id="readabilityScore">Readability: --</span>
       </div>
     </div>
 
-    <!-- Two Column Layout: Editor + Assistant Panel -->
-    <div class="flex flex-1 min-h-0 overflow-hidden">
-      <!-- LEFT: Manuscript Editor -->
-      <div class="flex-1 overflow-y-auto p-6 md:p-8">
-        <div class="max-w-4xl mx-auto bg-white rounded-2xl border border-[#EADDF0] shadow-sm overflow-hidden flex flex-col min-h-[700px]">
-          <div class="px-8 py-4 border-b border-[#EADDF0] flex justify-between items-center bg-[#FEFCF8]">
-            <div class="flex gap-4 items-center">
-              <span class="text-sm font-medium text-gray-500"><span id="wordCountDisplay">0</span> words</span>
-              <span class="text-sm text-gray-400">|</span>
-              <span class="text-sm text-gray-500">Last saved: <span id="lastSavedTime">just now</span></span>
-            </div>
-            <div class="flex gap-2">
-              <button id="clearEditorBtn" class="text-xs text-gray-400 hover:text-red-500 transition">Clear</button>
-            </div>
-          </div>
-          <textarea id="manuscriptEditor" class="writing-area w-full flex-1 p-8 md:p-10 text-gray-800 text-lg leading-relaxed resize-none border-none focus:ring-0 font-serif min-h-[600px]" placeholder="Start writing your story...&#10;&#10;Every great novel begins with a single word. Let it flow."></textarea>
-        </div>
+    <!-- Editor Area -->
+    <div class="flex-1 overflow-y-auto p-4 md:p-8">
+      <div class="max-w-4xl mx-auto bg-white rounded-2xl border border-[#EADDF0] shadow-sm">
+        <div id="editor" class="min-h-[600px] p-6 md:p-10"></div>
       </div>
+    </div>
 
-      <!-- RIGHT: Scene Engine + I'm Stuck Panel -->
-      <div class="w-[380px] bg-white border-l border-[#EADDF0] overflow-y-auto flex-shrink-0 p-5 space-y-6 shadow-xl">
-        <!-- Project Selector -->
-        <div class="bg-[#F9F5FC] rounded-xl p-4">
-          <label class="text-xs font-bold uppercase text-primary/70 tracking-wide">Active Project</label>
-          <select id="projectSelector" class="mt-1 w-full border border-gray-200 rounded-xl p-2.5 text-sm bg-white"></select>
+    <!-- Floating Smart Assistant -->
+    <div class="fixed bottom-4 right-4 z-50">
+      <button id="smartAssistantBtn" class="bg-primary text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all">
+        <span class="material-symbols-outlined">magic</span>
+      </button>
+    </div>
+
+    <!-- Revision History Modal -->
+    <div id="revisionModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-auto m-4 p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-headline font-bold">Revision History</h3>
+          <button onclick="document.getElementById('revisionModal').classList.add('hidden')" class="text-gray-500">&times;</button>
         </div>
+        <div id="revisionList" class="space-y-2"></div>
+      </div>
+    </div>
 
-        <!-- Scene Engine Panel -->
-        <div class="border border-[#EADDF0] rounded-xl p-4 bg-white">
-          <h3 class="font-headline font-bold text-lg flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-primary">theater_comedy</span>Scene Engine</h3>
-          <div class="space-y-3">
-            <textarea id="sceneDescription" rows="2" class="w-full border border-gray-200 rounded-xl p-2.5 text-sm" placeholder="Describe the scene... e.g., 'Two rivals meet in a rain-soaked alley'"></textarea>
-            <div><label class="text-xs text-gray-500">Characters involved (select from saved)</label>
-              <select id="sceneCharactersSelect" multiple class="w-full border border-gray-200 rounded-xl p-2 text-sm mt-1 h-20"></select>
-              <p class="text-[10px] text-gray-400 mt-1">Hold Ctrl/Cmd to select multiple</p>
-            </div>
-            <button id="generateSceneBtn" class="w-full bg-primary/10 text-primary font-semibold py-2.5 rounded-xl text-sm hover:bg-primary/20 transition flex items-center justify-center gap-2"><span class="material-symbols-outlined text-[18px]">auto_awesome</span>Generate Scene Directions</button>
-            <div id="sceneOutput" class="mt-3 bg-gray-50 p-3 rounded-xl text-sm text-gray-700 max-h-48 overflow-y-auto hidden"></div>
-          </div>
-        </div>
-
-        <!-- I'm Stuck Button & Panel -->
-        <div class="border border-[#EADDF0] rounded-xl p-4 bg-white">
-          <h3 class="font-headline font-bold text-lg flex items-center gap-2 mb-3"><span class="material-symbols-outlined text-tertiary">lightbulb</span>I'm Stuck</h3>
-          <div class="space-y-3">
-            <textarea id="lastEventDesc" rows="2" class="w-full border border-gray-200 rounded-xl p-2.5 text-sm" placeholder="Last event / where you're stuck... e.g., 'The hero just discovered the traitor's identity'"></textarea>
-            <button id="stuckBtn" class="w-full bg-tertiary/10 text-tertiary font-semibold py-2.5 rounded-xl text-sm hover:bg-tertiary/20 transition flex items-center justify-center gap-2"><span class="material-symbols-outlined text-[18px]">help</span>Get Unstuck</button>
-            <div id="stuckOutput" class="mt-3 bg-gray-50 p-3 rounded-xl text-sm text-gray-700 max-h-60 overflow-y-auto hidden"></div>
-          </div>
-        </div>
-
-        <!-- Quick Stats -->
-        <div class="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-xl p-4 text-center">
-          <p class="text-xs text-gray-500">Current Project Word Target</p>
-          <p class="text-2xl font-bold text-primary"><span id="targetWordSpan">0</span> words</p>
-          <div class="w-full bg-gray-200 rounded-full h-1.5 mt-2"><div id="progressBar" class="bg-primary h-1.5 rounded-full" style="width:0%"></div></div>
+    <!-- Daily Goal Modal -->
+    <div id="goalModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-2xl max-w-md w-full m-4 p-6">
+        <h3 class="text-xl font-headline font-bold mb-4">Set Daily Word Goal</h3>
+        <input type="number" id="dailyGoalInput" class="w-full border border-gray-200 rounded-xl p-3 mb-4" placeholder="Words per day" value="500">
+        <div class="flex gap-3">
+          <button id="saveGoalBtn" class="flex-1 bg-primary text-white py-2 rounded-xl">Save</button>
+          <button onclick="document.getElementById('goalModal').classList.add('hidden')" class="flex-1 border py-2 rounded-xl">Cancel</button>
         </div>
       </div>
     </div>
   </main>
 </div>
 
-<!-- MODAL: Character selector hint (lightweight) not needed extra but dynamic already -->
 <script src="app.js"></script>
 <script>
-  // Manuscript Editor specific logic
-  (function() {
-    loadState();
+  // Smart Editor Features
+  let quill;
+  let currentProject = null;
+  let autoSaveEnabled = true;
+  let revisionHistory = [];
+  let dailyGoal = 500;
+  let todayWords = 0;
+
+  function initEditor() {
+    quill = new Quill('#editor', {
+      theme: 'snow',
+      placeholder: 'Start writing your story...\n\nType @ to mention a character...',
+      modules: {
+        toolbar: [
+          ['bold', 'italic', 'underline', 'strike'],
+          ['blockquote', 'code-block'],
+          [{ 'header': 1 }, { 'header': 2 }],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          [{ 'script': 'sub'}, { 'script': 'super' }],
+          [{ 'indent': '-1'}, { 'indent': '+1' }],
+          [{ 'direction': 'rtl' }],
+          [{ 'size': ['small', false, 'large', 'huge'] }],
+          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+          [{ 'color': [] }, { 'background': [] }],
+          [{ 'font': [] }],
+          [{ 'align': [] }],
+          ['clean']
+        ],
+        mention: {
+          allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+          mentionDenotationChars: ['@'],
+          source: function(searchTerm, renderList) {
+            const characters = state.characters || [];
+            const matches = characters.filter(c => 
+              c.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            renderList(matches, searchTerm);
+          },
+          renderItem: function(item) {
+            return `${item.name} — ${item.role || 'Character'}`;
+          }
+        }
+      }
+    });
+
+    quill.on('text-change', () => {
+      const text = quill.getText();
+      const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+      document.getElementById('wordCountDisplay').innerText = words;
+      
+      // Update daily progress
+      if (currentProject) {
+        updateDailyProgress(words);
+      }
+      
+      if (autoSaveEnabled) {
+        debounceAutoSave();
+      }
+    });
+
+    // Load project content
+    loadProjectContent();
+  }
+
+  let autoSaveTimeout;
+  function debounceAutoSave() {
+    clearTimeout(autoSaveTimeout);
+    autoSaveTimeout = setTimeout(() => {
+      saveManuscript();
+    }, 1500);
+  }
+
+  function saveManuscript() {
+    if (!currentProject) return;
+    const content = quill.root.innerHTML;
+    const text = quill.getText();
+    const wordCount = text.trim().split(/\s+/).filter(w => w.length > 0).length;
     
-    // DOM elements
-    const editor = document.getElementById('manuscriptEditor');
-    const wordCountSpan = document.getElementById('wordCountDisplay');
-    const lastSavedSpan = document.getElementById('lastSavedTime');
-    const projectSelector = document.getElementById('projectSelector');
-    const projectTitleDisplay = document.getElementById('projectTitleDisplay');
-    const targetWordSpan = document.getElementById('targetWordSpan');
-    const progressBar = document.getElementById('progressBar');
-    const sceneCharsSelect = document.getElementById('sceneCharactersSelect');
-    const sceneDesc = document.getElementById('sceneDescription');
-    const sceneOutputDiv = document.getElementById('sceneOutput');
-    const stuckDesc = document.getElementById('lastEventDesc');
-    const stuckOutputDiv = document.getElementById('stuckOutput');
-
-    let autoSaveTimer = null;
-    let currentProject = null;
-
-    function getCurrentProjectFromState() {
-      if (!state.currentProjectId) return null;
-      return state.projects.find(p => p.id === state.currentProjectId) || null;
-    }
-
-    function updateProjectSelector() {
-      if (!projectSelector) return;
-      projectSelector.innerHTML = '<option value="">-- Select a project --</option>' + 
-        state.projects.map(proj => `<option value="${proj.id}" ${state.currentProjectId === proj.id ? 'selected' : ''}>${escapeHtml(proj.title)} (${proj.wordCount || 0} words)</option>`).join('');
-    }
-
-    function loadManuscriptContent() {
-      currentProject = getCurrentProjectFromState();
-      if (currentProject) {
-        editor.value = currentProject.manuscriptContent || '';
-        projectTitleDisplay.innerText = currentProject.title;
-        targetWordSpan.innerText = currentProject.targetWordCount || 50000;
-        updateWordCount();
-        updateProgress();
-      } else {
-        editor.value = '';
-        projectTitleDisplay.innerText = 'No project selected';
-        targetWordSpan.innerText = '0';
-        wordCountSpan.innerText = '0';
-        progressBar.style.width = '0%';
-      }
-    }
-
-    function updateWordCount() {
-      const text = editor.value;
-      const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
-      wordCountSpan.innerText = words;
-      if (currentProject) {
-        currentProject.wordCount = words;
-        currentProject.manuscriptContent = text;
-        currentProject.lastEdited = new Date().toISOString();
-        saveState();
-        updateProgress();
-        // update project selector label
-        updateProjectSelector();
-      }
-      return words;
-    }
-
-    function updateProgress() {
-      if (currentProject && currentProject.targetWordCount > 0) {
-        const percent = Math.min(100, Math.floor((currentProject.wordCount / currentProject.targetWordCount) * 100));
-        progressBar.style.width = `${percent}%`;
-      } else {
-        progressBar.style.width = '0%';
-      }
-    }
-
-    function autoSaveManuscript() {
-      if (currentProject) {
-        updateWordCount(); // this also saves
-        lastSavedSpan.innerText = new Date().toLocaleTimeString();
-      }
-    }
-
-    function onEditorInput() {
-      if (autoSaveTimer) clearTimeout(autoSaveTimer);
-      autoSaveTimer = setTimeout(() => {
-        autoSaveManuscript();
-      }, 800);
-      updateWordCount();
-    }
-
-    // Populate character dropdown for scene engine
-    function refreshCharacterSelect() {
-      const chars = state.characters || [];
-      sceneCharsSelect.innerHTML = chars.map(c => `<option value="${escapeHtml(c.name)}">${escapeHtml(c.name)} (${c.role || 'character'})</option>`).join('');
-      if (chars.length === 0) sceneCharsSelect.innerHTML = '<option disabled>No characters yet. Create some in Character Workshop</option>';
-    }
-
-    // ========== AI-Ready Placeholder Functions ==========
-    function generateSceneIdeas(description, characterNames) {
-      const charString = characterNames.length ? ` with ${characterNames.join(', ')}` : '';
-      const directions = [
-        `🎬 Opening: ${description}${charString}. Start with sensory detail — what does the air smell like? Is it tense or hopeful?`,
-        `⚡ Conflict injection: A misunderstanding escalates. One character reveals a hidden agenda.`,
-        `💔 Emotional beat: A moment of vulnerability. Someone says too much — or not enough.`,
-        `🌀 Twist: An unexpected third party arrives, changing the power dynamic.`,
-        `🌅 Resolution hook: End with a decision that propels the next scene.`
-      ];
-      return directions;
-    }
-
-    function generateTwists(lastEvent, charactersList, plotThreads) {
-      const twistIdeas = [
-        `🔀 Twist: The antagonist was actually being manipulated by a trusted ally.`,
-        `⚡ Escalation: The last event triggers a public accusation that forces the protagonist to flee.`,
-        `🌀 Wildcard: A natural disaster or magical event interrupts the confrontation.`,
-        `🔀 Twist: A character believed dead returns with crucial information.`,
-        `⚡ Escalation: The stakes double — someone’s life is now on the line.`,
-        `🌀 Wildcard: An ancient prophecy is revealed to be about this exact moment.`
-      ];
-      return {
-        twists: twistIdeas.slice(0,3),
-        escalations: twistIdeas.slice(3,5),
-        wildcard: twistIdeas[5]
-      };
-    }
-
-    // Scene generation handler
-    document.getElementById('generateSceneBtn')?.addEventListener('click', () => {
-      const description = sceneDesc.value.trim();
-      if (!description) { alert('Please describe the scene first.'); return; }
-      const selectedOptions = Array.from(sceneCharsSelect.selectedOptions).map(opt => opt.value);
-      const ideas = generateSceneIdeas(description, selectedOptions);
-      sceneOutputDiv.classList.remove('hidden');
-      sceneOutputDiv.innerHTML = `<div class="font-semibold mb-2 text-primary">✨ Scene Directions & Emotional Beats</div>` + 
-        ideas.map((idea, i) => `<div class="mb-2 pb-2 border-b border-gray-200 last:border-0">${idea}</div>`).join('');
+    // Save to revision history
+    revisionHistory.push({
+      timestamp: new Date().toISOString(),
+      content: content,
+      wordCount: wordCount,
+      preview: text.substring(0, 100)
     });
-
-    // I'm Stuck handler
-    document.getElementById('stuckBtn')?.addEventListener('click', () => {
-      const lastEvent = stuckDesc.value.trim();
-      if (!lastEvent) { alert('Describe where you\'re stuck (last event).'); return; }
-      const charNames = state.characters.map(c => c.name).slice(0,5);
-      const threadTitles = state.plotThreads.map(t => t.name).slice(0,3);
-      const { twists, escalations, wildcard } = generateTwists(lastEvent, charNames, threadTitles);
-      stuckOutputDiv.classList.remove('hidden');
-      stuckOutputDiv.innerHTML = `
-        <div class="font-bold text-tertiary mb-2">🔥 Twists</div>
-        <ul class="list-disc pl-4 mb-3 space-y-1">${twists.map(t => `<li class="text-sm">${t}</li>`).join('')}</ul>
-        <div class="font-bold text-tertiary mb-2">⚡ Escalations</div>
-        <ul class="list-disc pl-4 mb-3 space-y-1">${escalations.map(e => `<li class="text-sm">${e}</li>`).join('')}</ul>
-        <div class="font-bold text-tertiary mb-2">🌀 Wildcard</div>
-        <p class="text-sm italic">${wildcard}</p>
-      `;
-    });
-
-    // Project selector change
-    projectSelector?.addEventListener('change', (e) => {
-      const newProjectId = e.target.value;
-      if (newProjectId) {
-        state.currentProjectId = newProjectId;
-        saveState();
-        loadManuscriptContent();
-        refreshCharacterSelect();
-        currentProject = getCurrentProjectFromState();
-      } else {
-        state.currentProjectId = null;
-        saveState();
-        loadManuscriptContent();
-        currentProject = null;
-      }
-      updateProjectSelector();
-    });
-
-    // Clear editor button (safety)
-    document.getElementById('clearEditorBtn')?.addEventListener('click', () => {
-      if (confirm('Clear all manuscript text? This cannot be undone (but you have saved versions).')) {
-        editor.value = '';
-        updateWordCount();
-        autoSaveManuscript();
-      }
-    });
-
-    // Export
-    document.getElementById('exportBtnSidebar')?.addEventListener('click', () => {
-      const exportData = {
-        projects: state.projects,
-        characters: state.characters,
-        plotThreads: state.plotThreads,
-        worldData: state.worldData,
-        scenes: state.scenes,
-        manuscriptSnapshot: currentProject ? { projectId: currentProject.id, content: editor.value } : null
-      };
-      const blob = new Blob([JSON.stringify(exportData, null, 2)], {type: 'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `storybrain_export_${new Date().toISOString().slice(0,19)}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-    });
-
-    editor?.addEventListener('input', onEditorInput);
+    if (revisionHistory.length > 50) revisionHistory.shift();
+    localStorage.setItem(`revisions_${currentProject.id}`, JSON.stringify(revisionHistory));
     
-    // Initialize
-    updateProjectSelector();
-    refreshCharacterSelect();
-    loadManuscriptContent();
-    if (!currentProject && state.projects.length > 0 && !state.currentProjectId) {
-      // fallback: select first project
-      state.currentProjectId = state.projects[0].id;
-      saveState();
-      loadManuscriptContent();
-      updateProjectSelector();
+    // Update project
+    currentProject.manuscriptContent = content;
+    currentProject.wordCount = wordCount;
+    currentProject.lastEdited = new Date().toISOString();
+    saveState();
+    
+    document.getElementById('lastSavedTime').innerText = new Date().toLocaleTimeString();
+  }
+
+  function loadProjectContent() {
+    currentProject = getCurrentProject();
+    if (currentProject && quill) {
+      quill.root.innerHTML = currentProject.manuscriptContent || '';
+      const words = (currentProject.manuscriptContent || '').replace(/<[^>]*>/g, '').trim().split(/\s+/).filter(w => w.length > 0).length;
+      document.getElementById('wordCountDisplay').innerText = words;
+      
+      // Load revision history
+      const savedRevisions = localStorage.getItem(`revisions_${currentProject.id}`);
+      if (savedRevisions) revisionHistory = JSON.parse(savedRevisions);
     }
-    currentProject = getCurrentProjectFromState();
-  })();
+  }
+
+  function updateDailyProgress(currentWords) {
+    const today = new Date().toDateString();
+    const dailyStats = JSON.parse(localStorage.getItem('dailyStats') || '{}');
+    todayWords = dailyStats[today] || 0;
+    
+    if (currentWords > todayWords) {
+      dailyStats[today] = currentWords;
+      localStorage.setItem('dailyStats', JSON.stringify(dailyStats));
+      todayWords = currentWords;
+    }
+    
+    const remaining = Math.max(0, dailyGoal - todayWords);
+    document.getElementById('dailyGoalDisplay').innerHTML = `Daily: ${todayWords}/${dailyGoal}`;
+    
+    if (todayWords >= dailyGoal && dailyGoal > 0) {
+      showNotification('🎉 Congratulations! You\'ve reached your daily word goal!', 'success');
+    }
+    
+    // Update readability score
+    updateReadabilityScore(currentWords);
+  }
+
+  function updateReadabilityScore(wordCount) {
+    const text = quill.getText();
+    const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+    const wordsPerSentence = sentences > 0 ? wordCount / sentences : 0;
+    
+    let score = 'Excellent';
+    if (wordsPerSentence > 20) score = 'Complex';
+    else if (wordsPerSentence > 15) score = 'Good';
+    else if (wordsPerSentence > 10) score = 'Fair';
+    else if (wordsPerSentence > 0) score = 'Easy';
+    
+    document.getElementById('readabilityScore').innerHTML = `Readability: ${score}`;
+  }
+
+  function showNotification(message, type = 'info') {
+    const notif = document.createElement('div');
+    notif.className = `fixed bottom-20 right-4 p-4 rounded-xl shadow-lg z-50 animate-slide-in ${type === 'success' ? 'bg-green-500 text-white' : 'bg-primary text-white'}`;
+    notif.innerHTML = message;
+    document.body.appendChild(notif);
+    setTimeout(() => notif.remove(), 3000);
+  }
+
+  // Auto-save toggle
+  document.getElementById('autoSaveToggle')?.addEventListener('click', () => {
+    autoSaveEnabled = !autoSaveEnabled;
+    showNotification(`Auto-save ${autoSaveEnabled ? 'enabled' : 'disabled'}`, 'info');
+  });
+
+  // Revision history
+  document.getElementById('revisionHistoryBtn')?.addEventListener('click', () => {
+    const container = document.getElementById('revisionList');
+    if (revisionHistory.length === 0) {
+      container.innerHTML = '<div class="text-gray-500 text-center py-8">No revisions yet. Keep writing!</div>';
+    } else {
+      container.innerHTML = revisionHistory.slice().reverse().map(rev => `
+        <div class="border rounded-xl p-3 hover:bg-gray-50 cursor-pointer" onclick="restoreRevision('${rev.timestamp}')">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-xs text-gray-500">${new Date(rev.timestamp).toLocaleString()}</span>
+              <div class="text-sm font-medium">${rev.wordCount} words</div>
+              <div class="text-xs text-gray-600 mt-1 italic">${rev.preview.substring(0, 80)}...</div>
+            </div>
+            <button class="text-primary text-xs">Restore</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    document.getElementById('revisionModal').classList.remove('hidden');
+  });
+
+  window.restoreRevision = (timestamp) => {
+    const revision = revisionHistory.find(r => r.timestamp === timestamp);
+    if (revision && confirm('Restore this version? Current content will be saved in history.')) {
+      quill.root.innerHTML = revision.content;
+      saveManuscript();
+      document.getElementById('revisionModal').classList.add('hidden');
+      showNotification('Revision restored!', 'success');
+    }
+  };
+
+  // Daily goal
+  document.getElementById('wordCountGoalBtn')?.addEventListener('click', () => {
+    document.getElementById('dailyGoalInput').value = dailyGoal;
+    document.getElementById('goalModal').classList.remove('hidden');
+  });
+  
+  document.getElementById('saveGoalBtn')?.addEventListener('click', () => {
+    dailyGoal = parseInt(document.getElementById('dailyGoalInput').value) || 500;
+    localStorage.setItem('dailyGoal', dailyGoal);
+    document.getElementById('goalModal').classList.add('hidden');
+    showNotification(`Daily goal set to ${dailyGoal} words`, 'success');
+  });
+
+  // Smart Assistant (AI-ready)
+  document.getElementById('smartAssistantBtn')?.addEventListener('click', () => {
+    const selection = quill.getSelection();
+    const selectedText = selection ? quill.getText(selection.index, selection.length) : '';
+    
+    const suggestions = [
+      "✨ Consider adding sensory details to make the scene immersive.",
+      "📖 The protagonist's motivation could be stronger here.",
+      "💡 This would be a great place for a plot twist!",
+      "🔍 Show, don't tell - use action to reveal character emotions."
+    ];
+    
+    const randomSuggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
+    showNotification(randomSuggestion, 'info');
+  });
+
+  // Initialize
+  loadState();
+  initEditor();
+  
+  // Load daily goal
+  const savedGoal = localStorage.getItem('dailyGoal');
+  if (savedGoal) dailyGoal = parseInt(savedGoal);
+  
+  // Export
+  document.getElementById('exportBtnSidebar')?.addEventListener('click', () => {
+    const exportData = {
+      projects: state.projects,
+      characters: state.characters,
+      plotThreads: state.plotThreads,
+      worldData: state.worldData,
+      currentManuscript: quill?.root.innerHTML
+    };
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `storybrain_export_${new Date().toISOString().slice(0,19)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
 </script>
 </body>
 </html>
