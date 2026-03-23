@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Story Brain — World-building Atlas</title>
+  <!-- Tailwind + Google Fonts + Material Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    .font-headline { font-family: 'Epilogue', sans-serif; }
+    body { background-color: #FDF9F4; }
+    .card-hover { transition: all 0.2s ease; }
+    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
+    .modal-overlay { background-color: rgba(0,0,0,0.4); backdrop-filter: blur(2px); }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#A57982',
+            secondary: '#B98EA7',
+            tertiary: '#590004',
+            neutralBg: '#F0D3F7',
+            surface: '#FFFFFF',
+            surfaceMuted: '#F9F5FC',
+            borderLight: '#EEE6F0'
+          },
+          borderRadius: { 'xl': '1rem', '2xl': '1.25rem' }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#FDF9F4] text-gray-800 antialiased">
+
+<div class="flex min-h-screen">
+  <!-- ========== SIDEBAR (shared consistent design) ========== -->
+  <aside class="fixed left-0 top-0 h-full w-64 bg-white/90 backdrop-blur-sm border-r border-[#E5D5E8] shadow-sm z-50 flex flex-col p-5">
+    <div class="mb-8 px-2">
+      <h1 class="text-2xl font-headline font-extrabold tracking-tight bg-gradient-to-r from-[#A57982] to-[#590004] bg-clip-text text-transparent">Story Brain</h1>
+      <p class="text-xs text-gray-500 mt-1">creative workspace</p>
+    </div>
+    <nav class="flex-1 space-y-1.5">
+      <a href="index.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-[#F3E9F5] transition"><span class="material-symbols-outlined text-[22px]">dashboard</span>Dashboard</a>
+      <a href="manuscript.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-[#F3E9F5] transition"><span class="material-symbols-outlined text-[22px]">menu_book</span>Manuscript</a>
+      <a href="characters.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-[#F3E9F5] transition"><span class="material-symbols-outlined text-[22px]">group</span>Characters</a>
+      <a href="world.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium bg-primary/10 text-primary shadow-sm"><span class="material-symbols-outlined text-[22px]">public</span>World-building</a>
+      <div class="pt-4 mt-2 border-t border-[#EADDF0]"></div>
+      <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-[#F3E9F5] transition"><span class="material-symbols-outlined text-[22px]">archive</span>Archive</a>
+      <a href="#" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-[#F3E9F5] transition"><span class="material-symbols-outlined text-[22px]">delete</span>Trash</a>
+      <button id="exportBtnSidebar" class="mt-6 w-full bg-primary/20 text-primary font-semibold py-2.5 rounded-xl text-sm hover:bg-primary hover:text-white transition flex items-center justify-center gap-2"><span class="material-symbols-outlined text-[20px]">download</span>Export .txt</button>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="ml-64 flex-1">
+    <!-- Top Bar -->
+    <div class="sticky top-0 z-40 bg-[#FDF9F4]/80 backdrop-blur-md border-b border-[#EADDF0] px-8 py-4 flex justify-between items-center">
+      <h2 class="text-2xl font-headline font-bold text-[#2C1E2A]">World-building Atlas</h2>
+      <div class="flex items-center gap-3">
+        <span class="text-sm text-gray-500 flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">sync</span>Auto-saved</span>
+        <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]">person</span></div>
+      </div>
+    </div>
+
+    <div class="p-8 max-w-7xl mx-auto">
+      <!-- Header + Add Buttons -->
+      <div class="flex flex-wrap justify-between items-start gap-4 mb-8">
+        <div>
+          <h2 class="text-3xl font-headline font-bold text-[#2C1E2A]">Lore & Atlas</h2>
+          <p class="text-gray-500 mt-1">Build cultures, locations, magic systems, and track plot threads</p>
+        </div>
+        <div class="flex gap-3">
+          <button id="addWorldEntryBtn" class="bg-primary hover:bg-[#8e6272] text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-sm flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">add_location</span>Add Location/Lore</button>
+          <button id="addPlotThreadBtn" class="border border-primary text-primary hover:bg-primary/10 px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">timeline</span>Add Plot Thread</button>
+        </div>
+      </div>
+
+      <!-- Two Column Layout: World Entries + Plot Thread Tracker -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- LEFT: World Entries (locations, cultures, rules, history) -->
+        <div class="lg:col-span-2">
+          <div class="flex items-center justify-between mb-5">
+            <h3 class="text-xl font-headline font-semibold flex items-center gap-2"><span class="material-symbols-outlined text-primary">public</span>World Entries</h3>
+            <span id="worldCountBadge" class="text-xs bg-gray-100 px-2 py-1 rounded-full text-gray-600">0 entries</span>
+          </div>
+          <div id="worldEntriesList" class="space-y-4 max-h-[600px] overflow-y-auto pr-2 scrollbar-hide"></div>
+          <div id="emptyWorldMsg" class="text-center py-12 bg-white/30 rounded-2xl border border-dashed border-primary/30 mt-4 hidden">
+            <span class="material-symbols-outlined text-4xl text-primary/40">map</span>
+            <p class="text-gray-500 mt-2">No world entries yet. Click "Add Location/Lore" to start building.</p>
+          </div>
+        </div>
+
+        <!-- RIGHT: Plot Thread Tracker -->
+        <div class="bg-white rounded-2xl border border-[#EADDF0] p-5 shadow-sm">
+          <div class="flex items-center justify-between mb-5">
+            <h3 class="text-xl font-headline font-semibold flex items-center gap-2"><span class="material-symbols-outlined text-primary">timeline</span>Plot Threads</h3>
+            <span id="threadCountBadge" class="text-xs bg-gray-100 px-2 py-1 rounded-full">0</span>
+          </div>
+          <div id="plotThreadsList" class="space-y-4 max-h-[500px] overflow-y-auto"></div>
+          <div id="emptyThreadMsg" class="text-center py-8 text-gray-400 text-sm hidden">No plot threads — start tracking narrative arcs.</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL: Add/Edit World Entry -->
+<div id="worldModal" class="fixed inset-0 flex items-center justify-center z-50 hidden transition-all">
+  <div class="absolute inset-0 modal-overlay"></div>
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 p-6 relative z-10">
+    <div class="flex justify-between items-center mb-5">
+      <h3 class="text-xl font-headline font-bold" id="worldModalTitle">Add World Entry</h3>
+      <button id="closeWorldModal" class="text-gray-400 hover:text-gray-600"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <input type="hidden" id="worldEditId" value="">
+    <div class="space-y-4">
+      <div><label class="block text-sm font-medium text-gray-700 mb-1">Entry Type</label><select id="worldType" class="w-full border border-gray-200 rounded-xl p-2.5 bg-gray-50"><option value="location">📍 Location</option><option value="culture">🏛️ Culture / Faction</option><option value="rules">⚙️ Rules / Magic System</option><option value="history">📜 History / Event</option></select></div>
+      <div><label class="block text-sm font-medium text-gray-700 mb-1">Title / Name</label><input id="worldTitle" type="text" class="w-full border border-gray-200 rounded-xl p-2.5" placeholder="e.g., The Floating City, The Order of Ash"></div>
+      <div><label class="block text-sm font-medium text-gray-700 mb-1">Description / Lore</label><textarea id="worldDesc" rows="4" class="w-full border border-gray-200 rounded-xl p-2.5" placeholder="Detailed notes, history, culture, or mechanics..."></textarea></div>
+    </div>
+    <div class="flex gap-3 mt-6">
+      <button id="saveWorldEntry" class="bg-primary text-white px-5 py-2.5 rounded-xl font-semibold flex-1">Save Entry</button>
+      <button id="cancelWorldModal" class="border border-gray-300 px-5 py-2.5 rounded-xl">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Add/Edit Plot Thread -->
+<div id="threadModal" class="fixed inset-0 flex items-center justify-center z-50 hidden transition-all">
+  <div class="absolute inset-0 modal-overlay"></div>
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 p-6 relative z-10">
+    <div class="flex justify-between items-center mb-5">
+      <h3 class="text-xl font-headline font-bold" id="threadModalTitle">Plot Thread</h3>
+      <button id="closeThreadModal" class="text-gray-400 hover:text-gray-600"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <input type="hidden" id="threadEditId" value="">
+    <div class="space-y-4">
+      <div><label class="block text-sm font-medium text-gray-700 mb-1">Thread Name</label><input id="threadName" type="text" class="w-full border border-gray-200 rounded-xl p-2.5" placeholder="e.g., The Betrayal of House Verne"></div>
+      <div><label class="block text-sm font-medium text-gray-700 mb-1">Description</label><textarea id="threadDesc" rows="2" class="w-full border border-gray-200 rounded-xl p-2.5" placeholder="What is the conflict or arc?"></textarea></div>
+      <div><label class="block text-sm font-medium text-gray-700 mb-1">Status</label><select id="threadStatus" class="w-full border border-gray-200 rounded-xl p-2.5"><option value="introduced">🌱 Introduced</option><option value="developing">⚡ Developing</option><option value="unresolved">🌀 Unresolved</option><option value="resolved">✅ Resolved</option></select></div>
+      <div><label class="block text-sm font-medium text-gray-700 mb-1">Linked Characters (comma-separated names)</label><input id="threadLinkedChars" type="text" class="w-full border border-gray-200 rounded-xl p-2.5" placeholder="e.g., Elara, Thorne"></div>
+    </div>
+    <div class="flex gap-3 mt-6">
+      <button id="savePlotThread" class="bg-primary text-white px-5 py-2.5 rounded-xl font-semibold flex-1">Save Thread</button>
+      <button id="cancelThreadModal" class="border border-gray-300 px-5 py-2.5 rounded-xl">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<script>
+  // World-building Atlas specific logic
+  (function() {
+    loadState();
+
+    // DOM elements
+    const worldContainer = document.getElementById('worldEntriesList');
+    const threadContainer = document.getElementById('plotThreadsList');
+    const emptyWorldMsg = document.getElementById('emptyWorldMsg');
+    const emptyThreadMsg = document.getElementById('emptyThreadMsg');
+    const worldCountBadge = document.getElementById('worldCountBadge');
+    const threadCountBadge = document.getElementById('threadCountBadge');
+
+    // Modals
+    const worldModal = document.getElementById('worldModal');
+    const threadModal = document.getElementById('threadModal');
+    const worldEditId = document.getElementById('worldEditId');
+    const worldTitle = document.getElementById('worldTitle');
+    const worldType = document.getElementById('worldType');
+    const worldDesc = document.getElementById('worldDesc');
+    const threadEditId = document.getElementById('threadEditId');
+    const threadName = document.getElementById('threadName');
+    const threadDesc = document.getElementById('threadDesc');
+    const threadStatus = document.getElementById('threadStatus');
+    const threadLinkedChars = document.getElementById('threadLinkedChars');
+
+    // Helper render functions
+    function renderWorldEntries() {
+      if (!worldContainer) return;
+      const entries = state.worldData || [];
+      worldCountBadge.innerText = `${entries.length} entries`;
+      if (entries.length === 0) {
+        worldContainer.innerHTML = '';
+        emptyWorldMsg.classList.remove('hidden');
+        return;
+      }
+      emptyWorldMsg.classList.add('hidden');
+      worldContainer.innerHTML = entries.map(entry => `
+        <div class="bg-white rounded-xl border border-[#EADDF0] p-5 card-hover" data-entry-id="${entry.id}">
+          <div class="flex justify-between items-start">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">${getTypeIcon(entry.type)}</span>
+              <h4 class="font-headline font-bold text-lg">${escapeHtml(entry.title)}</h4>
+            </div>
+            <div class="flex gap-2">
+              <button class="editWorldBtn text-gray-400 hover:text-primary transition" data-id="${entry.id}"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+              <button class="deleteWorldBtn text-gray-400 hover:text-red-500 transition" data-id="${entry.id}"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+            </div>
+          </div>
+          <div class="mt-2"><span class="text-xs bg-gray-100 px-2 py-0.5 rounded-full text-gray-600">${entry.type.toUpperCase()}</span></div>
+          <p class="text-gray-600 text-sm mt-3 leading-relaxed">${escapeHtml(entry.description).substring(0, 180)}${entry.description.length > 180 ? '…' : ''}</p>
+        </div>
+      `).join('');
+      // Attach edit/delete events
+      document.querySelectorAll('.editWorldBtn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = btn.dataset.id;
+          const entry = state.worldData.find(w => w.id === id);
+          if (entry) openWorldModal(entry);
+        });
+      });
+      document.querySelectorAll('.deleteWorldBtn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = btn.dataset.id;
+          if (confirm('Delete this world entry?')) {
+            state.worldData = state.worldData.filter(w => w.id !== id);
+            saveState();
+            renderWorldEntries();
+            updateInsightsSidebar();
+          }
+        });
+      });
+    }
+
+    function renderPlotThreads() {
+      if (!threadContainer) return;
+      const threads = state.plotThreads || [];
+      threadCountBadge.innerText = `${threads.length}`;
+      if (threads.length === 0) {
+        threadContainer.innerHTML = '';
+        emptyThreadMsg.classList.remove('hidden');
+        return;
+      }
+      emptyThreadMsg.classList.add('hidden');
+      threadContainer.innerHTML = threads.map(thread => {
+        const statusColor = { introduced: 'bg-amber-100 text-amber-800', developing: 'bg-blue-100 text-blue-800', unresolved: 'bg-rose-100 text-rose-800', resolved: 'bg-green-100 text-green-800' }[thread.status] || 'bg-gray-100';
+        return `
+          <div class="border-b border-gray-100 pb-3 last:border-0" data-thread-id="${thread.id}">
+            <div class="flex justify-between items-start">
+              <div><h4 class="font-bold text-gray-800">${escapeHtml(thread.name)}</h4><p class="text-xs text-gray-500 mt-0.5">${escapeHtml(thread.description || 'No description')}</p></div>
+              <div class="flex gap-1">
+                <button class="editThreadBtn text-gray-400 hover:text-primary" data-id="${thread.id}"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+                <button class="deleteThreadBtn text-gray-400 hover:text-red-500" data-id="${thread.id}"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+              </div>
+            </div>
+            <div class="flex flex-wrap justify-between items-center mt-2"><span class="text-[10px] px-2 py-0.5 rounded-full ${statusColor} font-bold">${thread.status.toUpperCase()}</span><span class="text-[10px] text-gray-400">${thread.linkedCharacters ? '🔗 ' + thread.linkedCharacters : ''}</span></div>
+          </div>
+        `;
+      }).join('');
+      document.querySelectorAll('.editThreadBtn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = btn.dataset.id;
+          const thread = state.plotThreads.find(t => t.id === id);
+          if (thread) openThreadModal(thread);
+        });
+      });
+      document.querySelectorAll('.deleteThreadBtn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = btn.dataset.id;
+          if (confirm('Delete plot thread?')) {
+            state.plotThreads = state.plotThreads.filter(t => t.id !== id);
+            saveState();
+            renderPlotThreads();
+            updateInsightsSidebar();
+          }
+        });
+      });
+    }
+
+    function getTypeIcon(type) {
+      const icons = { location: '📍', culture: '🏛️', rules: '⚙️', history: '📜' };
+      return icons[type] || '📌';
+    }
+
+    function openWorldModal(entry = null) {
+      if (entry) {
+        worldEditId.value = entry.id;
+        worldTitle.value = entry.title;
+        worldType.value = entry.type;
+        worldDesc.value = entry.description;
+        document.getElementById('worldModalTitle').innerText = 'Edit World Entry';
+      } else {
+        worldEditId.value = '';
+        worldTitle.value = '';
+        worldType.value = 'location';
+        worldDesc.value = '';
+        document.getElementById('worldModalTitle').innerText = 'Add World Entry';
+      }
+      worldModal.classList.remove('hidden');
+    }
+
+    function openThreadModal(thread = null) {
+      if (thread) {
+        threadEditId.value = thread.id;
+        threadName.value = thread.name;
+        threadDesc.value = thread.description || '';
+        threadStatus.value = thread.status;
+        threadLinkedChars.value = thread.linkedCharacters || '';
+        document.getElementById('threadModalTitle').innerText = 'Edit Plot Thread';
+      } else {
+        threadEditId.value = '';
+        threadName.value = '';
+        threadDesc.value = '';
+        threadStatus.value = 'introduced';
+        threadLinkedChars.value = '';
+        document.getElementById('threadModalTitle').innerText = 'Add Plot Thread';
+      }
+      threadModal.classList.remove('hidden');
+    }
+
+    function saveWorldEntryHandler() {
+      const id = worldEditId.value || Date.now().toString();
+      const newEntry = {
+        id: id,
+        title: worldTitle.value.trim(),
+        type: worldType.value,
+        description: worldDesc.value.trim(),
+        updatedAt: new Date().toISOString()
+      };
+      if (!newEntry.title) { alert('Please enter a title'); return; }
+      const existingIndex = state.worldData.findIndex(w => w.id === id);
+      if (existingIndex !== -1) {
+        state.worldData[existingIndex] = newEntry;
+      } else {
+        state.worldData.push(newEntry);
+      }
+      saveState();
+      renderWorldEntries();
+      updateInsightsSidebar();
+      worldModal.classList.add('hidden');
+    }
+
+    function saveThreadHandler() {
+      const id = threadEditId.value || Date.now().toString();
+      const newThread = {
+        id: id,
+        name: threadName.value.trim(),
+        description: threadDesc.value.trim(),
+        status: threadStatus.value,
+        linkedCharacters: threadLinkedChars.value.trim(),
+        updatedAt: new Date().toISOString()
+      };
+      if (!newThread.name) { alert('Thread name required'); return; }
+      const existingIndex = state.plotThreads.findIndex(t => t.id === id);
+      if (existingIndex !== -1) {
+        state.plotThreads[existingIndex] = newThread;
+      } else {
+        state.plotThreads.push(newThread);
+      }
+      saveState();
+      renderPlotThreads();
+      updateInsightsSidebar();
+      threadModal.classList.add('hidden');
+    }
+
+    function updateInsightsSidebar() {
+      // update optional global counters for dashboard insights if needed, but no requirement
+      const totalWorld = state.worldData.length;
+      const totalThreads = state.plotThreads.length;
+      if (window.updateGlobalStats) window.updateGlobalStats(totalWorld, totalThreads);
+    }
+
+    // Event listeners
+    document.getElementById('addWorldEntryBtn')?.addEventListener('click', () => openWorldModal(null));
+    document.getElementById('addPlotThreadBtn')?.addEventListener('click', () => openThreadModal(null));
+    document.getElementById('saveWorldEntry')?.addEventListener('click', saveWorldEntryHandler);
+    document.getElementById('savePlotThread')?.addEventListener('click', saveThreadHandler);
+    document.getElementById('closeWorldModal')?.addEventListener('click', () => worldModal.classList.add('hidden'));
+    document.getElementById('cancelWorldModal')?.addEventListener('click', () => worldModal.classList.add('hidden'));
+    document.getElementById('closeThreadModal')?.addEventListener('click', () => threadModal.classList.add('hidden'));
+    document.getElementById('cancelThreadModal')?.addEventListener('click', () => threadModal.classList.add('hidden'));
+
+    // initial render
+    renderWorldEntries();
+    renderPlotThreads();
+
+    // Export functionality
+    document.getElementById('exportBtnSidebar')?.addEventListener('click', () => {
+      const allData = {
+        projects: state.projects,
+        characters: state.characters,
+        plotThreads: state.plotThreads,
+        worldData: state.worldData,
+        scenes: state.scenes || []
+      };
+      const dataStr = JSON.stringify(allData, null, 2);
+      const blob = new Blob([dataStr], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `storybrain_export_${new Date().toISOString().slice(0,19)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // close modal on outside click
+    window.addEventListener('click', (e) => {
+      if (e.target === worldModal) worldModal.classList.add('hidden');
+      if (e.target === threadModal) threadModal.classList.add('hidden');
+    });
+  })();
+</script>
+</body>
+</html>
