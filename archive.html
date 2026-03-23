@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Story Brain — Archive</title>
+  <!-- Same styles as dashboard -->
+</head>
+<body>
+  <!-- Same sidebar structure -->
+  <main class="ml-64 flex-1">
+    <div class="p-8">
+      <h2 class="text-3xl font-headline font-bold mb-6">Archive</h2>
+      <div class="space-y-6">
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Archived Projects</h3>
+          <div id="archivedProjectsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Archived Characters</h3>
+          <div id="archivedCharactersList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </div>
+        <!-- Similar for world entries, plot threads -->
+      </div>
+    </div>
+  </main>
+  <script src="app.js"></script>
+  <script>
+    loadState();
+    // Render archived items with "Restore" and "Delete Forever" buttons
+  </script>
+</body>
+</html>
