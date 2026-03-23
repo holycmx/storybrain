@@ -171,6 +171,110 @@ function initializeSampleData() {
 }
 
 // ============================================
+// DARK MODE - WORKS ACROSS ALL PAGES
+// ============================================
+
+// Initialize dark mode when page loads
+function initDarkMode() {
+  // Check localStorage for saved preference
+  const savedMode = localStorage.getItem('darkMode');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  
+  // Set dark mode if saved as true OR if no saved preference and system prefers dark
+  const shouldBeDark = savedMode === 'true' || (savedMode === null && prefersDark);
+  
+  if (shouldBeDark) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+  
+  updateDarkModeButton();
+}
+
+// Toggle dark mode on/off
+function toggleDarkMode() {
+  if (document.documentElement.classList.contains('dark')) {
+    document.documentElement.classList.remove('dark');
+    localStorage.setItem('darkMode', 'false');
+  } else {
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('darkMode', 'true');
+  }
+  updateDarkModeButton();
+}
+
+// Update the button icon based on current mode
+function updateDarkModeButton() {
+  const buttons = document.querySelectorAll('.dark-mode-toggle');
+  const isDark = document.documentElement.classList.contains('dark');
+  
+  buttons.forEach(btn => {
+    btn.innerHTML = isDark ? 
+      '<span class="material-symbols-outlined">light_mode</span>' : 
+      '<span class="material-symbols-outlined">dark_mode</span>';
+  });
+}
+
+// Add dark mode CSS to all pages
+function addDarkModeStyles() {
+  const style = document.createElement('style');
+  style.textContent = `
+    /* Dark mode styles */
+    .dark {
+      color-scheme: dark;
+    }
+    .dark body {
+      background-color: #1a1a1a;
+      color: #e5e5e5;
+    }
+    .dark .bg-white {
+      background-color: #2d2d2d !important;
+    }
+    .dark .bg-[#FDF9F4] {
+      background-color: #1a1a1a !important;
+    }
+    .dark .border-[#EADDF0] {
+      border-color: #404040 !important;
+    }
+    .dark .text-gray-800 {
+      color: #e5e5e5 !important;
+    }
+    .dark .text-gray-500 {
+      color: #9ca3af !important;
+    }
+    .dark .bg-gray-100 {
+      background-color: #3d3d3d !important;
+    }
+    .dark .bg-[#FAF2FE] {
+      background-color: #2d2d2d !important;
+    }
+    .dark .bg-surface-container-low {
+      background-color: #2d2d2d !important;
+    }
+    .dark .bg-white/90 {
+      background-color: #2d2d2d !important;
+    }
+    .dark .hover\:bg-gray-100:hover {
+      background-color: #404040 !important;
+    }
+    .dark .ql-toolbar {
+      background-color: #2d2d2d !important;
+      border-color: #404040 !important;
+    }
+    .dark .ql-editor {
+      background-color: #2d2d2d !important;
+      color: #e5e5e5 !important;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+// Call this on every page
+initDarkMode();
+addDarkModeStyles();
+
+// ============================================
 // PROJECT MANAGEMENT FUNCTIONS
 // ============================================
 
