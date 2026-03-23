@@ -220,6 +220,90 @@ function deleteProject(projectId) {
   }
 }
 
+// Move to Trash
+function moveToTrash(type, id) {
+  let item = null;
+  switch(type) {
+    case 'project':
+      item = state.projects.find(p => p.id === id);
+      if (item) {
+        state.projects = state.projects.filter(p => p.id !== id);
+        state.trashedProjects = state.trashedProjects || [];
+        state.trashedProjects.push({ ...item, trashedAt: new Date().toISOString() });
+        if (state.currentProjectId === id) state.currentProjectId = null;
+      }
+      break;
+    case 'character':
+      item = state.characters.find(c => c.id === id);
+      if (item) {
+        state.characters = state.characters.filter(c => c.id !== id);
+        state.trashedCharacters = state.trashedCharacters || [];
+        state.trashedCharacters.push({ ...item, trashedAt: new Date().toISOString() });
+      }
+      break;
+    case 'world':
+      item = state.worldData.find(w => w.id === id);
+      if (item) {
+        state.worldData = state.worldData.filter(w => w.id !== id);
+        state.trashedWorldEntries = state.trashedWorldEntries || [];
+        state.trashedWorldEntries.push({ ...item, trashedAt: new Date().toISOString() });
+      }
+      break;
+    case 'thread':
+      item = state.plotThreads.find(t => t.id === id);
+      if (item) {
+        state.plotThreads = state.plotThreads.filter(t => t.id !== id);
+        state.trashedPlotThreads = state.trashedPlotThreads || [];
+        state.trashedPlotThreads.push({ ...item, trashedAt: new Date().toISOString() });
+      }
+      break;
+  }
+  if (item) {
+    saveState();
+    return true;
+  }
+  return false;
+}
+
+function restoreFromArchive(type, id) {
+  let item = null;
+  switch(type) {
+    case 'project':
+      item = state.archivedProjects?.find(p => p.id === id);
+      if (item) {
+        state.archivedProjects = state.archivedProjects.filter(p => p.id !== id);
+        state.projects.push(item);
+      }
+      break;
+    case 'character':
+      item = state.archivedCharacters?.find(c => c.id === id);
+      if (item) {
+        state.archivedCharacters = state.archivedCharacters.filter(c => c.id !== id);
+        state.characters.push(item);
+      }
+      break;
+    case 'world':
+      item = state.archivedWorldEntries?.find(w => w.id === id);
+      if (item) {
+        state.archivedWorldEntries = state.archivedWorldEntries.filter(w => w.id !== id);
+        state.worldData.push(item);
+      }
+      break;
+    case 'thread':
+      item = state.archivedPlotThreads?.find(t => t.id === id);
+      if (item) {
+        state.archivedPlotThreads = state.archivedPlotThreads.filter(t => t.id !== id);
+        state.plotThreads.push(item);
+      }
+      break;
+  }
+  if (item) {
+    saveState();
+    return true;
+  }
+  return false;
+}
+
 // ============================================
 // CHARACTER MANAGEMENT FUNCTIONS
 // ============================================
@@ -488,3 +572,5 @@ window.exportAllData = exportAllData;
 window.importData = importData;
 window.resetAllData = resetAllData;
 window.escapeHtml = escapeHtml;
+window.moveToTrash = moveToTrash;
+window.restoreFromArchive = restoreFromArchive;
