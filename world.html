@@ -38,6 +38,10 @@
 <body class="bg-[#FDF9F4] text-gray-800 antialiased">
 
 <div class="flex min-h-screen">
+  <!-- Add this button to your top bar -->
+<button id="darkModeToggle" class="dark-mode-toggle p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+  <span class="material-symbols-outlined">dark_mode</span>
+</button>
   <!-- ========== SIDEBAR (shared consistent design) ========== -->
   <aside class="fixed left-0 top-0 h-full w-64 bg-white/90 backdrop-blur-sm border-r border-[#E5D5E8] shadow-sm z-50 flex flex-col p-5">
     <div class="mb-8 px-2">
@@ -404,6 +408,10 @@
       if (e.target === threadModal) threadModal.classList.add('hidden');
     });
   })();
+</script>
+  <script>
+  // Make sure dark mode toggle works on this page
+  document.getElementById('darkModeToggle')?.addEventListener('click', toggleDarkMode);
 </script>
 </body>
 </html>
