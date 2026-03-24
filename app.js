@@ -1070,6 +1070,39 @@ function resetAllData() {
     window.location.reload();
   }
 }
+// Delete forever
+function permanentDelete(type, id) {
+  switch(type) {
+    case 'project':
+      state.trashedProjects = state.trashedProjects?.filter(p => p.id !== id);
+      break;
+    case 'character':
+      state.trashedCharacters = state.trashedCharacters?.filter(c => c.id !== id);
+      break;
+    case 'world':
+      state.trashedWorldEntries = state.trashedWorldEntries?.filter(w => w.id !== id);
+      break;
+    case 'thread':
+      state.trashedPlotThreads = state.trashedPlotThreads?.filter(t => t.id !== id);
+      break;
+  }
+  saveState();
+  showNotification('Item permanently deleted', 'success');
+  return true;
+}
+
+function emptyTrash() {
+  if (confirm('⚠️ PERMANENT DELETE: This will delete ALL items in trash forever. This cannot be undone. Continue?')) {
+    state.trashedProjects = [];
+    state.trashedCharacters = [];
+    state.trashedWorldEntries = [];
+    state.trashedPlotThreads = [];
+    saveState();
+    showNotification('Trash emptied', 'success');
+    return true;
+  }
+  return false;
+}
 
 // Escape HTML for safe display
 function escapeHtml(text) {
@@ -1134,3 +1167,5 @@ window.restoreFromArchive = restoreFromArchive;
 window.toggleDarkMode = toggleDarkMode;
 window.initDarkMode = initDarkMode;
 window.showNotification = showNotification;
+window.permanentDelete = permanentDelete;
+window.emptyTrash = emptyTrash;
