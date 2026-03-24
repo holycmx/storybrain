@@ -60,6 +60,9 @@
           <button id="revisionHistoryBtn" class="p-2 rounded-lg hover:bg-gray-100 text-xs" title="Revision history">
             <span class="material-symbols-outlined text-[18px]">history</span>
           </button>
+          <button id="darkModeToggle" class="dark-mode-toggle p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+  <span class="material-symbols-outlined">dark_mode</span>
+</button>
         </div>
       </div>
       <div class="flex items-center gap-2 flex-wrap">
@@ -358,6 +361,10 @@
     a.click();
     URL.revokeObjectURL(url);
   });
+</script>
+  <script>
+  // Make sure dark mode toggle works on this page
+  document.getElementById('darkModeToggle')?.addEventListener('click', toggleDarkMode);
 </script>
 </body>
 </html>
