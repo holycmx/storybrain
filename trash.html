@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>Story Brain — Trash</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,17 +13,12 @@
     body { background-color: #FDF9F4; }
     .card-hover { transition: all 0.2s ease; }
     .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
+    .modal-overlay { background-color: rgba(0,0,0,0.4); backdrop-filter: blur(2px); }
   </style>
 </head>
 <body class="bg-[#FDF9F4] text-gray-800">
 
 <div class="flex min-h-screen">
-
-<!-- Topbar -->
-<button id="darkModeToggle" class="dark-mode-toggle p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-  <span class="material-symbols-outlined">dark_mode</span>
-</button>
-  
   <!-- Sidebar -->
   <aside class="fixed left-0 top-0 h-full w-64 bg-white/90 backdrop-blur-sm border-r border-[#E5D5E8] shadow-sm z-50 flex flex-col p-5">
     <div class="mb-8 px-2">
@@ -38,7 +33,7 @@
       <div class="pt-4 mt-2 border-t border-[#EADDF0]"></div>
       <a href="archive.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-[#F3E9F5] transition"><span class="material-symbols-outlined text-[22px]">archive</span>Archive</a>
       <a href="trash.html" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium bg-primary/10 text-primary shadow-sm"><span class="material-symbols-outlined text-[22px]">delete</span>Trash</a>
-      <button id="exportBtnSidebar" class="mt-6 w-full bg-primary/20 text-primary font-semibold py-2.5 rounded-xl text-sm hover:bg-primary hover:text-white transition flex items-center justify-center gap-2"><span class="material-symbols-outlined text-[20px]">download</span>Export .txt</button>
+      <button id="exportBtnSidebar" class="mt-6 w-full bg-primary/20 text-primary font-semibold py-2.5 rounded-xl text-sm hover:bg-primary hover:text-white transition flex items-center justify-center gap-2"><span class="material-symbols-outlined text-[20px]">download</span>Export</button>
     </nav>
   </aside>
 
@@ -49,130 +44,269 @@
         <h2 class="text-2xl font-headline font-bold text-[#2C1E2A]">Trash</h2>
         <p class="text-sm text-gray-500 mt-1">Items in trash will be automatically deleted after 30 days. Restore or permanently delete them.</p>
       </div>
-      <button id="emptyTrashBtn" class="bg-red-500 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-red-600 transition flex items-center gap-2">
-        <span class="material-symbols-outlined text-[18px]">delete_forever</span>Empty Trash
-      </button>
+      <div class="flex gap-3">
+        <button id="darkModeToggle" class="dark-mode-toggle p-2 rounded-lg hover:bg-gray-100 transition">
+          <span class="material-symbols-outlined">dark_mode</span>
+        </button>
+        <button id="emptyTrashBtn" class="bg-red-500 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-red-600 transition flex items-center gap-2">
+          <span class="material-symbols-outlined text-[18px]">delete_forever</span>Empty Trash
+        </button>
+      </div>
     </div>
 
     <div class="p-8 max-w-7xl mx-auto">
       <!-- Trashed Projects -->
       <div class="mb-10">
-        <h3 class="text-xl font-headline font-semibold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-red-500">folder</span>Trashed Projects</h3>
+        <h3 class="text-xl font-headline font-semibold mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-red-500">folder</span>
+          Trashed Projects
+          <span id="projectCount" class="text-sm text-gray-400 ml-2"></span>
+        </h3>
         <div id="trashedProjectsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
       </div>
 
       <!-- Trashed Characters -->
       <div class="mb-10">
-        <h3 class="text-xl font-headline font-semibold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-red-500">group</span>Trashed Characters</h3>
+        <h3 class="text-xl font-headline font-semibold mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-red-500">group</span>
+          Trashed Characters
+          <span id="charCount" class="text-sm text-gray-400 ml-2"></span>
+        </h3>
         <div id="trashedCharactersList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
       </div>
 
       <!-- Trashed World Entries -->
       <div class="mb-10">
-        <h3 class="text-xl font-headline font-semibold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-red-500">public</span>Trashed World Entries</h3>
+        <h3 class="text-xl font-headline font-semibold mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-red-500">public</span>
+          Trashed World Entries
+          <span id="worldCount" class="text-sm text-gray-400 ml-2"></span>
+        </h3>
         <div id="trashedWorldList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
       </div>
 
       <!-- Trashed Plot Threads -->
       <div>
-        <h3 class="text-xl font-headline font-semibold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-red-500">timeline</span>Trashed Plot Threads</h3>
+        <h3 class="text-xl font-headline font-semibold mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-red-500">timeline</span>
+          Trashed Plot Threads
+          <span id="threadCount" class="text-sm text-gray-400 ml-2"></span>
+        </h3>
         <div id="trashedThreadsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
       </div>
     </div>
   </main>
 </div>
 
+<!-- Confirm Permanent Delete Modal -->
+<div id="confirmDeleteModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+  <div class="absolute inset-0 modal-overlay"></div>
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 p-6 relative z-10">
+    <h3 class="text-xl font-headline font-bold mb-3">Permanently Delete?</h3>
+    <p class="text-gray-600 mb-6">This action cannot be undone. The item will be gone forever.</p>
+    <div class="flex gap-3">
+      <button id="confirmPermanentDeleteBtn" class="bg-red-500 text-white px-5 py-2.5 rounded-xl font-semibold flex-1">Delete Forever</button>
+      <button id="cancelDeleteModalBtn" class="border border-gray-300 px-5 py-2.5 rounded-xl">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <script src="app.js"></script>
 <script>
   loadState();
-
+  
+  let pendingDelete = { type: null, id: null };
+  
   function renderTrashedProjects() {
     const container = document.getElementById('trashedProjectsList');
     const projects = state.trashedProjects || [];
+    document.getElementById('projectCount').innerText = `(${projects.length})`;
+    
     if (projects.length === 0) {
       container.innerHTML = '<div class="col-span-full text-center py-8 text-gray-400 bg-white/30 rounded-xl border border-dashed">Trash is empty</div>';
       return;
     }
+    
     container.innerHTML = projects.map(proj => `
       <div class="bg-white rounded-xl border border-red-100 p-4 card-hover">
-        <h4 class="font-headline font-bold">${escapeHtml(proj.title)}</h4>
+        <h4 class="font-headline font-bold text-lg">${escapeHtml(proj.title)}</h4>
         <p class="text-sm text-gray-500 mt-1">${proj.wordCount || 0} words • Deleted ${new Date(proj.trashedAt).toLocaleDateString()}</p>
         <div class="flex gap-2 mt-3">
-          <button onclick="restoreFromTrash('project', '${proj.id}'); location.reload();" class="text-sm bg-green-50 text-green-600 px-3 py-1 rounded-lg hover:bg-green-100">Restore</button>
-          <button onclick="if(confirm('Permanently delete this project? This cannot be undone.')) { permanentDelete('project', '${proj.id}'); location.reload(); }" class="text-sm bg-red-50 text-red-600 px-3 py-1 rounded-lg hover:bg-red-100">Delete Forever</button>
+          <button onclick="restoreFromTrash('project', '${proj.id}'); location.reload();" class="flex-1 text-sm bg-green-50 text-green-600 px-3 py-1.5 rounded-lg hover:bg-green-100 transition flex items-center justify-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">restore</span> Restore
+          </button>
+          <button onclick="openPermanentDeleteModal('project', '${proj.id}')" class="flex-1 text-sm bg-red-50 text-red-600 px-3 py-1.5 rounded-lg hover:bg-red-100 transition flex items-center justify-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">delete_forever</span> Delete Forever
+          </button>
         </div>
       </div>
     `).join('');
   }
-
+  
   function renderTrashedCharacters() {
     const container = document.getElementById('trashedCharactersList');
     const chars = state.trashedCharacters || [];
+    document.getElementById('charCount').innerText = `(${chars.length})`;
+    
     if (chars.length === 0) {
       container.innerHTML = '<div class="col-span-full text-center py-8 text-gray-400 bg-white/30 rounded-xl border border-dashed">Trash is empty</div>';
       return;
     }
+    
     container.innerHTML = chars.map(char => `
       <div class="bg-white rounded-xl border border-red-100 p-4 card-hover">
-        <h4 class="font-headline font-bold">${escapeHtml(char.name)}</h4>
+        <h4 class="font-headline font-bold text-lg">${escapeHtml(char.name)}</h4>
         <p class="text-sm text-gray-500 mt-1">${char.role || 'No role'} • Deleted ${new Date(char.trashedAt).toLocaleDateString()}</p>
         <div class="flex gap-2 mt-3">
-          <button onclick="restoreFromTrash('character', '${char.id}'); location.reload();" class="text-sm bg-green-50 text-green-600 px-3 py-1 rounded-lg hover:bg-green-100">Restore</button>
-          <button onclick="if(confirm('Permanently delete this character?')) { permanentDelete('character', '${char.id}'); location.reload(); }" class="text-sm bg-red-50 text-red-600 px-3 py-1 rounded-lg hover:bg-red-100">Delete Forever</button>
+          <button onclick="restoreFromTrash('character', '${char.id}'); location.reload();" class="flex-1 text-sm bg-green-50 text-green-600 px-3 py-1.5 rounded-lg hover:bg-green-100 transition flex items-center justify-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">restore</span> Restore
+          </button>
+          <button onclick="openPermanentDeleteModal('character', '${char.id}')" class="flex-1 text-sm bg-red-50 text-red-600 px-3 py-1.5 rounded-lg hover:bg-red-100 transition flex items-center justify-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">delete_forever</span> Delete Forever
+          </button>
         </div>
       </div>
     `).join('');
   }
-
+  
   function renderTrashedWorld() {
     const container = document.getElementById('trashedWorldList');
     const entries = state.trashedWorldEntries || [];
+    document.getElementById('worldCount').innerText = `(${entries.length})`;
+    
     if (entries.length === 0) {
       container.innerHTML = '<div class="col-span-full text-center py-8 text-gray-400 bg-white/30 rounded-xl border border-dashed">Trash is empty</div>';
       return;
     }
-    container.innerHTML = entries.map(entry => `
-      <div class="bg-white rounded-xl border border-red-100 p-4 card-hover">
-        <h4 class="font-headline font-bold">${escapeHtml(entry.title)}</h4>
-        <p class="text-xs text-gray-400 mb-1">${entry.type?.toUpperCase() || 'Entry'}</p>
-        <p class="text-sm text-gray-600 line-clamp-2">${escapeHtml(entry.description?.substring(0, 100))}</p>
-        <div class="flex gap-2 mt-3">
-          <button onclick="restoreFromTrash('world', '${entry.id}'); location.reload();" class="text-sm bg-green-50 text-green-600 px-3 py-1 rounded-lg hover:bg-green-100">Restore</button>
-          <button onclick="if(confirm('Permanently delete this entry?')) { permanentDelete('world', '${entry.id}'); location.reload(); }" class="text-sm bg-red-50 text-red-600 px-3 py-1 rounded-lg hover:bg-red-100">Delete Forever</button>
+    
+    container.innerHTML = entries.map(entry => {
+      const typeIcon = { location: '📍', culture: '🏛️', rules: '⚙️', history: '📜' }[entry.type] || '📌';
+      return `
+        <div class="bg-white rounded-xl border border-red-100 p-4 card-hover">
+          <h4 class="font-headline font-bold text-lg">${escapeHtml(entry.title)}</h4>
+          <p class="text-xs text-gray-400 mt-1">${typeIcon} ${entry.type?.toUpperCase() || 'Entry'} • Deleted ${new Date(entry.trashedAt).toLocaleDateString()}</p>
+          <p class="text-sm text-gray-600 mt-2 line-clamp-2">${escapeHtml(entry.description?.substring(0, 100))}</p>
+          <div class="flex gap-2 mt-3">
+            <button onclick="restoreFromTrash('world', '${entry.id}'); location.reload();" class="flex-1 text-sm bg-green-50 text-green-600 px-3 py-1.5 rounded-lg hover:bg-green-100 transition flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-[16px]">restore</span> Restore
+            </button>
+            <button onclick="openPermanentDeleteModal('world', '${entry.id}')" class="flex-1 text-sm bg-red-50 text-red-600 px-3 py-1.5 rounded-lg hover:bg-red-100 transition flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-[16px]">delete_forever</span> Delete Forever
+            </button>
+          </div>
         </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
-
+  
   function renderTrashedThreads() {
     const container = document.getElementById('trashedThreadsList');
     const threads = state.trashedPlotThreads || [];
+    document.getElementById('threadCount').innerText = `(${threads.length})`;
+    
     if (threads.length === 0) {
       container.innerHTML = '<div class="col-span-full text-center py-8 text-gray-400 bg-white/30 rounded-xl border border-dashed">Trash is empty</div>';
       return;
     }
-    container.innerHTML = threads.map(thread => `
-      <div class="bg-white rounded-xl border border-red-100 p-4 card-hover">
-        <h4 class="font-headline font-bold">${escapeHtml(thread.name)}</h4>
-        <p class="text-xs text-gray-400 mb-1">Status: ${thread.status}</p>
-        <p class="text-sm text-gray-600 line-clamp-2">${escapeHtml(thread.description?.substring(0, 100))}</p>
-        <div class="flex gap-2 mt-3">
-          <button onclick="restoreFromTrash('thread', '${thread.id}'); location.reload();" class="text-sm bg-green-50 text-green-600 px-3 py-1 rounded-lg hover:bg-green-100">Restore</button>
-          <button onclick="if(confirm('Permanently delete this thread?')) { permanentDelete('thread', '${thread.id}'); location.reload(); }" class="text-sm bg-red-50 text-red-600 px-3 py-1 rounded-lg hover:bg-red-100">Delete Forever</button>
+    
+    container.innerHTML = threads.map(thread => {
+      const statusColor = { introduced: 'bg-amber-100 text-amber-800', developing: 'bg-blue-100 text-blue-800', unresolved: 'bg-rose-100 text-rose-800', resolved: 'bg-green-100 text-green-800' }[thread.status] || 'bg-gray-100';
+      return `
+        <div class="bg-white rounded-xl border border-red-100 p-4 card-hover">
+          <h4 class="font-headline font-bold text-lg">${escapeHtml(thread.name)}</h4>
+          <p class="text-xs text-gray-400 mt-1">Status: ${thread.status} • Deleted ${new Date(thread.trashedAt).toLocaleDateString()}</p>
+          <p class="text-sm text-gray-600 mt-2 line-clamp-2">${escapeHtml(thread.description?.substring(0, 100))}</p>
+          <div class="flex gap-2 mt-3">
+            <button onclick="restoreFromTrash('thread', '${thread.id}'); location.reload();" class="flex-1 text-sm bg-green-50 text-green-600 px-3 py-1.5 rounded-lg hover:bg-green-100 transition flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-[16px]">restore</span> Restore
+            </button>
+            <button onclick="openPermanentDeleteModal('thread', '${thread.id}')" class="flex-1 text-sm bg-red-50 text-red-600 px-3 py-1.5 rounded-lg hover:bg-red-100 transition flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-[16px]">delete_forever</span> Delete Forever
+            </button>
+          </div>
         </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
-
-  renderTrashedProjects();
-  renderTrashedCharacters();
-  renderTrashedWorld();
-  renderTrashedThreads();
-
-  document.getElementById('emptyTrashBtn')?.addEventListener('click', () => {
-    if (emptyTrash()) location.reload();
+  
+  function openPermanentDeleteModal(type, id) {
+    pendingDelete = { type, id };
+    document.getElementById('confirmDeleteModal').classList.remove('hidden');
+  }
+  
+  function performPermanentDelete() {
+    if (pendingDelete.type && pendingDelete.id) {
+      permanentDelete(pendingDelete.type, pendingDelete.id);
+      // Refresh all lists
+      renderTrashedProjects();
+      renderTrashedCharacters();
+      renderTrashedWorld();
+      renderTrashedThreads();
+    }
+    document.getElementById('confirmDeleteModal').classList.add('hidden');
+    pendingDelete = { type: null, id: null };
+  }
+  
+  // Restore from trash function
+  function restoreFromTrash(type, id) {
+    let item = null;
+    switch(type) {
+      case 'project':
+        item = state.trashedProjects?.find(p => p.id === id);
+        if (item) {
+          state.trashedProjects = state.trashedProjects.filter(p => p.id !== id);
+          state.projects.push(item);
+        }
+        break;
+      case 'character':
+        item = state.trashedCharacters?.find(c => c.id === id);
+        if (item) {
+          state.trashedCharacters = state.trashedCharacters.filter(c => c.id !== id);
+          state.characters.push(item);
+        }
+        break;
+      case 'world':
+        item = state.trashedWorldEntries?.find(w => w.id === id);
+        if (item) {
+          state.trashedWorldEntries = state.trashedWorldEntries.filter(w => w.id !== id);
+          state.worldData.push(item);
+        }
+        break;
+      case 'thread':
+        item = state.trashedPlotThreads?.find(t => t.id === id);
+        if (item) {
+          state.trashedPlotThreads = state.trashedPlotThreads.filter(t => t.id !== id);
+          state.plotThreads.push(item);
+        }
+        break;
+    }
+    if (item) {
+      saveState();
+      showNotification('Item restored from trash', 'success');
+    }
+  }
+  
+  // Modal controls
+  document.getElementById('confirmPermanentDeleteBtn')?.addEventListener('click', performPermanentDelete);
+  document.getElementById('cancelDeleteModalBtn')?.addEventListener('click', () => {
+    document.getElementById('confirmDeleteModal').classList.add('hidden');
+    pendingDelete = { type: null, id: null };
   });
-
+  
+  // Empty trash
+  document.getElementById('emptyTrashBtn')?.addEventListener('click', () => {
+    if (emptyTrash()) {
+      renderTrashedProjects();
+      renderTrashedCharacters();
+      renderTrashedWorld();
+      renderTrashedThreads();
+    }
+  });
+  
+  // Dark mode
+  document.getElementById('darkModeToggle')?.addEventListener('click', toggleDarkMode);
+  
+  // Export
   document.getElementById('exportBtnSidebar')?.addEventListener('click', () => {
     const blob = new Blob([JSON.stringify(state, null, 2)], {type: 'application/json'});
     const url = URL.createObjectURL(blob);
@@ -182,10 +316,12 @@
     a.click();
     URL.revokeObjectURL(url);
   });
-</script>
-  <script>
-  // Make sure dark mode toggle works on this page
-  document.getElementById('darkModeToggle')?.addEventListener('click', toggleDarkMode);
+  
+  // Initial render
+  renderTrashedProjects();
+  renderTrashedCharacters();
+  renderTrashedWorld();
+  renderTrashedThreads();
 </script>
 </body>
 </html>
