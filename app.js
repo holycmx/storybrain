@@ -216,496 +216,25 @@ function updateDarkModeButton() {
   });
 }
 
-// Add dark mode styles with CSS variables
+// Add dark mode styles
 function addDarkModeStyles() {
   const style = document.createElement('style');
   style.textContent = `
-    /* ============================================
-       DARK MODE - CSS Variables Theme - COMPLETE COVERAGE
-       Based on provided design tokens
-    ============================================ */
-    
-    .dark {
-      /* Base colors */
-      --clr-dark-a0: #000000;
-      --clr-light-a0: #ffffff;
-      
-      /* Theme primary colors - Soft lavender */
-      --clr-primary-a0: #b47db8;
-      --clr-primary-a10: #bd8bc0;
-      --clr-primary-a20: #c599c8;
-      --clr-primary-a30: #cea7cf;
-      --clr-primary-a40: #d6b6d7;
-      --clr-primary-a50: #dec4df;
-      
-      /* Theme surface colors - Dark charcoal */
-      --clr-surface-a0: #121212;
-      --clr-surface-a10: #282828;
-      --clr-surface-a20: #3f3f3f;
-      --clr-surface-a30: #575757;
-      --clr-surface-a40: #717171;
-      --clr-surface-a50: #8b8b8b;
-      
-      /* Theme tonal surface colors - Warm gray */
-      --clr-surface-tonal-a0: #201c20;
-      --clr-surface-tonal-a10: #353135;
-      --clr-surface-tonal-a20: #4b474b;
-      --clr-surface-tonal-a30: #625f62;
-      --clr-surface-tonal-a40: #7a777a;
-      --clr-surface-tonal-a50: #939193;
-      
-      /* Status colors */
-      --clr-success-a0: #22946e;
-      --clr-success-a10: #47d5a6;
-      --clr-success-a20: #9ae8ce;
-      --clr-warning-a0: #a87a2a;
-      --clr-warning-a10: #d7ac61;
-      --clr-warning-a20: #ecd7b2;
-      --clr-danger-a0: #9c2121;
-      --clr-danger-a10: #d94a4a;
-      --clr-danger-a20: #eb9e9e;
-      --clr-info-a0: #21498a;
-      --clr-info-a10: #4077d1;
-      --clr-info-a20: #92b2e5;
-    }
-    
-    /* Apply CSS variables to ALL elements */
+    /* Dark mode styles - keep your existing styles here */
     .dark {
       color-scheme: dark;
     }
-    
-    /* Base Background - COMPLETE COVERAGE */
-    .dark body,
-    .dark .bg-\[#FDF9F4\],
-    .dark .bg-background,
-    .dark [class*="bg-\[#FDF9F4\]"],
-    .dark [class*="bg-\[\#FDF9F4\]"] {
-      background-color: var(--clr-surface-a0) !important;
+    .dark body {
+      background-color: #121212 !important;
+      color: #E8E8E8 !important;
     }
-    
-    /* Header/Top Bar - Fix the beige header issue */
-    .dark header,
-    .dark .sticky.top-0,
-    .dark .sticky,
-    .dark [class*="backdrop-blur"],
-    .dark .bg-\[#FDF9F4\]\/80,
-    .dark .bg-white\/80,
-    .dark [class*="bg-white\/80"] {
-      background-color: var(--clr-surface-a0) !important;
-      backdrop-filter: blur(8px) !important;
-      border-bottom-color: var(--clr-surface-a20) !important;
+    .dark .bg-white {
+      background-color: #1E1E1E !important;
     }
-    
-    /* All background colors - COMPREHENSIVE COVERAGE */
-    .dark .bg-white,
-    .dark .bg-surface,
-    .dark .bg-surface-container,
-    .dark .bg-surface-container-low,
-    .dark .bg-surface-container-lowest,
-    .dark .bg-surface-container-high,
-    .dark .bg-surface-container-highest,
-    .dark .rounded-xl,
-    .dark .rounded-2xl,
-    .dark [class*="bg-white"],
-    .dark [class*="bg-gray-50"],
-    .dark [class*="bg-gray-100"],
-    .dark [class*="bg-gray-200"],
-    .dark [class*="bg-gray-300"],
-    .dark [class*="bg-gray-400"] {
-      background-color: var(--clr-surface-a10) !important;
+    .dark .border {
+      border-color: #2A2A2A !important;
     }
-    
-    /* Cards and containers */
-    .dark .bg-white\/90,
-    .dark .bg-white\/80,
-    .dark .bg-white\/70,
-    .dark .bg-white\/60,
-    .dark .bg-white\/50,
-    .dark .bg-white\/40,
-    .dark .bg-white\/30,
-    .dark .bg-white\/20,
-    .dark .bg-white\/10 {
-      background-color: rgba(40, 40, 40, 0.95) !important;
-    }
-    
-    /* Elevated surfaces */
-    .dark .shadow-sm,
-    .dark .shadow-md,
-    .dark .shadow-lg,
-    .dark .card-hover:hover {
-      background-color: var(--clr-surface-a20) !important;
-    }
-    
-    /* Borders - All borders */
-    .dark .border,
-    .dark .border-t,
-    .dark .border-b,
-    .dark .border-l,
-    .dark .border-r,
-    .dark .border-[#EADDF0],
-    .dark .border-gray-200,
-    .dark .border-gray-300,
-    .dark [class*="border-"] {
-      border-color: var(--clr-surface-a20) !important;
-    }
-    
-    /* TEXT COLORS - ALL TEXT */
-    .dark .text-gray-800,
-    .dark .text-gray-700,
-    .dark .text-gray-900,
-    .dark .text-on-surface,
-    .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6,
-    .dark .font-bold,
-    .dark .font-semibold,
-    .dark .font-headline,
-    .dark .text-2xl,
-    .dark .text-3xl,
-    .dark .text-xl,
-    .dark .text-lg,
-    .dark [class*="text-gray-800"],
-    .dark [class*="text-gray-700"] {
-      color: var(--clr-light-a0) !important;
-    }
-    
-    .dark .text-gray-600,
-    .dark .text-gray-500,
-    .dark .text-on-surface-variant,
-    .dark p:not(.text-primary),
-    .dark .text-sm:not(.text-primary),
-    .dark [class*="text-gray-600"],
-    .dark [class*="text-gray-500"] {
-      color: var(--clr-surface-a50) !important;
-    }
-    
-    .dark .text-gray-400,
-    .dark .text-gray-300,
-    .dark [class*="text-gray-400"],
-    .dark [class*="text-gray-300"] {
-      color: var(--clr-surface-a40) !important;
-    }
-    
-    /* PRIMARY COLOR */
-    .dark .bg-primary {
-      background-color: var(--clr-primary-a0) !important;
-    }
-    
-    .dark .bg-primary\/10 {
-      background-color: rgba(180, 125, 184, 0.12) !important;
-    }
-    
-    .dark .bg-primary\/20 {
-      background-color: rgba(180, 125, 184, 0.2) !important;
-    }
-    
-    .dark .text-primary {
-      color: var(--clr-primary-a30) !important;
-    }
-    
-    .dark .hover\:bg-primary\/10:hover {
-      background-color: rgba(180, 125, 184, 0.18) !important;
-    }
-    
-    .dark .border-primary {
-      border-color: var(--clr-primary-a0) !important;
-    }
-    
-    /* SECONDARY COLOR */
-    .dark .bg-secondary {
-      background-color: var(--clr-surface-tonal-a20) !important;
-    }
-    
-    .dark .text-secondary {
-      color: var(--clr-primary-a20) !important;
-    }
-    
-    /* Stats Cards and Info Sections */
-    .dark .bg-\[#FAF2FE\],
-    .dark .bg-gray-50,
-    .dark .bg-gray-100,
-    .dark [class*="bg-\[#FAF2FE\]"] {
-      background-color: var(--clr-surface-tonal-a0) !important;
-    }
-    
-    /* Buttons */
-    .dark button:not(.bg-primary):not(.bg-red-500):not(.bg-green-500):not(.bg-blue-500) {
-      background-color: var(--clr-surface-a10) !important;
-      color: var(--clr-light-a0) !important;
-      border: 1px solid var(--clr-surface-a20) !important;
-    }
-    
-    .dark button:not(.bg-primary):not(.bg-red-500):not(.bg-green-500):not(.bg-blue-500):hover {
-      background-color: var(--clr-surface-a20) !important;
-    }
-    
-    /* Input Fields */
-    .dark input,
-    .dark textarea,
-    .dark select {
-      background-color: var(--clr-surface-tonal-a0) !important;
-      border-color: var(--clr-surface-a20) !important;
-      color: var(--clr-light-a0) !important;
-    }
-    
-    .dark input:focus,
-    .dark textarea:focus,
-    .dark select:focus {
-      border-color: var(--clr-primary-a0) !important;
-      outline: none !important;
-      box-shadow: 0 0 0 2px rgba(180, 125, 184, 0.2) !important;
-    }
-    
-    .dark input::placeholder,
-    .dark textarea::placeholder {
-      color: var(--clr-surface-a40) !important;
-    }
-    
-    /* Sidebar */
-    .dark aside,
-    .dark .fixed.left-0,
-    .dark [class*="fixed left-0"] {
-      background-color: var(--clr-dark-a0) !important;
-      border-right-color: var(--clr-surface-a10) !important;
-    }
-    
-    .dark nav a {
-      color: var(--clr-surface-a50) !important;
-    }
-    
-    .dark nav a:hover {
-      background-color: var(--clr-surface-a10) !important;
-      color: var(--clr-light-a0) !important;
-    }
-    
-    .dark nav a.bg-primary\/10 {
-      background-color: rgba(180, 125, 184, 0.12) !important;
-      color: var(--clr-primary-a30) !important;
-    }
-    
-    /* Modals */
-    .dark .fixed.bg-white,
-    .dark .modal-content,
-    .dark [class*="fixed"] > .bg-white {
-      background-color: var(--clr-surface-a10) !important;
-      border-color: var(--clr-surface-a20) !important;
-    }
-    
-    /* Progress Bars */
-    .dark .bg-gray-100,
-    .dark .bg-gray-200 {
-      background-color: var(--clr-surface-a20) !important;
-    }
-    
-    .dark .bg-primary.rounded-full {
-      background-color: var(--clr-primary-a0) !important;
-    }
-    
-    /* Status Badges */
-    .dark .bg-green-100 {
-      background-color: rgba(34, 148, 110, 0.2) !important;
-      color: var(--clr-success-a10) !important;
-    }
-    
-    .dark .bg-green-50 {
-      background-color: rgba(34, 148, 110, 0.15) !important;
-    }
-    
-    .dark .text-green-600,
-    .dark .text-green-500 {
-      color: var(--clr-success-a10) !important;
-    }
-    
-    .dark .bg-amber-100 {
-      background-color: rgba(168, 122, 42, 0.2) !important;
-      color: var(--clr-warning-a10) !important;
-    }
-    
-    .dark .bg-red-100 {
-      background-color: rgba(156, 33, 33, 0.2) !important;
-      color: var(--clr-danger-a10) !important;
-    }
-    
-    .dark .bg-red-50 {
-      background-color: rgba(156, 33, 33, 0.15) !important;
-    }
-    
-    .dark .text-red-600,
-    .dark .text-red-500 {
-      color: var(--clr-danger-a10) !important;
-    }
-    
-    .dark .bg-blue-100 {
-      background-color: rgba(33, 73, 138, 0.2) !important;
-      color: var(--clr-info-a10) !important;
-    }
-    
-    /* Links */
-    .dark a:not(.text-primary) {
-      color: var(--clr-surface-a50) !important;
-    }
-    
-    .dark a:not(.text-primary):hover {
-      color: var(--clr-primary-a30) !important;
-    }
-    
-    /* Quill Editor */
-    .dark .ql-toolbar {
-      background-color: var(--clr-surface-a10) !important;
-      border-color: var(--clr-surface-a20) !important;
-    }
-    
-    .dark .ql-toolbar button .ql-stroke {
-      stroke: var(--clr-surface-a50) !important;
-    }
-    
-    .dark .ql-toolbar button .ql-fill {
-      fill: var(--clr-surface-a50) !important;
-    }
-    
-    .dark .ql-toolbar button:hover .ql-stroke,
-    .dark .ql-toolbar button:hover .ql-fill {
-      stroke: var(--clr-primary-a30) !important;
-      fill: var(--clr-primary-a30) !important;
-    }
-    
-    .dark .ql-editor {
-      background-color: var(--clr-surface-a10) !important;
-      color: var(--clr-light-a0) !important;
-    }
-    
-    .dark .ql-picker {
-      color: var(--clr-surface-a50) !important;
-    }
-    
-    .dark .ql-picker-options {
-      background-color: var(--clr-surface-a20) !important;
-      color: var(--clr-light-a0) !important;
-    }
-    
-    /* Toast Notifications */
-    .dark .bg-green-500 {
-      background-color: var(--clr-success-a0) !important;
-      color: var(--clr-light-a0) !important;
-    }
-    
-    .dark .bg-red-500 {
-      background-color: var(--clr-danger-a0) !important;
-      color: var(--clr-light-a0) !important;
-    }
-    
-    .dark .bg-blue-500 {
-      background-color: var(--clr-info-a0) !important;
-      color: var(--clr-light-a0) !important;
-    }
-    
-    /* Scrollbar */
-    .dark ::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
-    }
-    
-    .dark ::-webkit-scrollbar-track {
-      background: var(--clr-surface-a0);
-    }
-    
-    .dark ::-webkit-scrollbar-thumb {
-      background: var(--clr-surface-a30);
-      border-radius: 5px;
-    }
-    
-    .dark ::-webkit-scrollbar-thumb:hover {
-      background: var(--clr-surface-a40);
-    }
-    
-    /* Dropdown menus */
-    .dark select option {
-      background-color: var(--clr-surface-a20);
-      color: var(--clr-light-a0);
-    }
-    
-    /* Icons */
-    .dark .material-symbols-outlined {
-      color: inherit;
-    }
-    
-    /* Dividers */
-    .dark hr {
-      border-color: var(--clr-surface-a20) !important;
-    }
-    
-    /* Cards with hover effects */
-    .dark .card-hover:hover,
-    .dark .hover\:shadow-lg:hover {
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
-      background-color: var(--clr-surface-a20) !important;
-    }
-    
-    /* Project cards */
-    .dark [data-project-id] {
-      background-color: var(--clr-surface-a10) !important;
-    }
-    
-    .dark [data-project-id]:hover {
-      background-color: var(--clr-surface-a20) !important;
-    }
-    
-    /* Stats numbers */
-    .dark .text-3xl,
-    .dark .text-2xl.font-bold {
-      color: var(--clr-primary-a30) !important;
-    }
-    
-    /* Headers in stats cards */
-    .dark .text-primary.font-bold {
-      color: var(--clr-primary-a30) !important;
-    }
-    
-    /* Modal close button */
-    .dark .text-gray-400:hover {
-      color: var(--clr-primary-a30) !important;
-    }
-    
-    /* Headline text */
-    .dark .font-headline {
-      color: var(--clr-primary-a20) !important;
-    }
-    
-    /* Success text */
-    .dark .text-success {
-      color: var(--clr-success-a10) !important;
-    }
-    
-    /* Warning text */
-    .dark .text-warning {
-      color: var(--clr-warning-a10) !important;
-    }
-    
-    /* Danger text */
-    .dark .text-danger {
-      color: var(--clr-danger-a10) !important;
-    }
-    
-    /* Info text */
-    .dark .text-info {
-      color: var(--clr-info-a10) !important;
-    }
-    
-    /* Dashboard specific - Hero section */
-    .dark .bg-surface-container-low {
-      background-color: var(--clr-surface-a10) !important;
-    }
-    
-    /* Ensure all cards have proper background */
-    .dark .bg-white.rounded-xl,
-    .dark .bg-white.rounded-2xl {
-      background-color: var(--clr-surface-a10) !important;
-    }
-    
-    /* Fix any remaining beige backgrounds */
-    .dark [class*="bg-\[#"],
-    .dark [class*="bg-#"],
-    .dark [style*="background"] {
-      background-color: var(--clr-surface-a10) !important;
-    }
+    /* Add more dark mode styles as needed */
   `;
   document.head.appendChild(style);
 }
@@ -721,6 +250,250 @@ function showNotification(message, type = 'info') {
   notif.innerHTML = message;
   document.body.appendChild(notif);
   setTimeout(() => notif.remove(), 3000);
+}
+
+// ============================================
+// FIREBASE CLOUD SYNC
+// ============================================
+
+// Your Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDgzqTB1zJokBz1hXWMo-JpmzIoIpYn3lE",
+  authDomain: "story-brain-ec07c.firebaseapp.com",
+  projectId: "story-brain-ec07c",
+  storageBucket: "story-brain-ec07c.firebasestorage.app",
+  messagingSenderId: "244917769549",
+  appId: "1:244917769549:web:ddbb7c7390a5776c185304",
+  measurementId: "G-TNRYJGZTQ9"
+};
+
+let firebaseApp = null;
+let db = null;
+let auth = null;
+let currentUser = null;
+
+// Initialize Firebase
+async function initFirebase() {
+  // Check if Firebase is already loaded
+  if (typeof firebase === 'undefined') {
+    console.warn('⚠️ Firebase SDK not loaded. Make sure to add the Firebase scripts to your HTML.');
+    return false;
+  }
+  
+  try {
+    // Initialize Firebase
+    firebaseApp = firebase.initializeApp(firebaseConfig);
+    db = firebase.firestore();
+    auth = firebase.auth();
+    
+    // Enable offline persistence
+    await db.enablePersistence({ synchronizeTabs: true });
+    
+    // Listen for auth state changes
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        currentUser = user;
+        updateAuthUI();
+        await loadFromCloud();
+      } else {
+        currentUser = null;
+        updateAuthUI();
+      }
+    });
+    
+    console.log('✅ Firebase initialized successfully');
+    return true;
+  } catch (error) {
+    console.error('Firebase init failed:', error);
+    return false;
+  }
+}
+
+// Sign up with email
+async function signUp(email, password) {
+  if (!auth) await initFirebase();
+  
+  try {
+    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+    currentUser = userCredential.user;
+    updateAuthUI();
+    await syncToCloud();
+    showNotification('✅ Account created! Your data is now in the cloud.', 'success');
+    return true;
+  } catch (error) {
+    let message = error.message;
+    if (error.code === 'auth/email-already-in-use') {
+      message = 'This email is already registered. Try signing in instead.';
+    } else if (error.code === 'auth/weak-password') {
+      message = 'Password should be at least 6 characters.';
+    }
+    showNotification(message, 'error');
+    return false;
+  }
+}
+
+// Sign in
+async function signIn(email, password) {
+  if (!auth) await initFirebase();
+  
+  try {
+    const userCredential = await auth.signInWithEmailAndPassword(email, password);
+    currentUser = userCredential.user;
+    updateAuthUI();
+    await loadFromCloud();
+    showNotification('✅ Signed in! Your data has been loaded from the cloud.', 'success');
+    return true;
+  } catch (error) {
+    let message = 'Sign in failed. Check your email and password.';
+    if (error.code === 'auth/user-not-found') {
+      message = 'No account found with this email. Create one first.';
+    } else if (error.code === 'auth/wrong-password') {
+      message = 'Incorrect password. Try again.';
+    }
+    showNotification(message, 'error');
+    return false;
+  }
+}
+
+// Sign out
+async function signOut() {
+  if (!auth) return;
+  
+  try {
+    await auth.signOut();
+    currentUser = null;
+    updateAuthUI();
+    showNotification('Signed out. Your data is still saved locally.', 'info');
+  } catch (error) {
+    showNotification('Sign out failed: ' + error.message, 'error');
+  }
+}
+
+// Sync to Firebase Cloud
+async function syncToCloud() {
+  if (!currentUser || !db) {
+    showNotification('Please sign in first to sync to cloud.', 'error');
+    return false;
+  }
+  
+  try {
+    await db.collection('user_data').doc(currentUser.uid).set({
+      data: JSON.stringify(state),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      lastSync: new Date().toISOString()
+    });
+    showNotification('☁️ Synced to cloud!', 'success');
+    return true;
+  } catch (error) {
+    console.error('Sync failed:', error);
+    showNotification('Sync failed: ' + error.message, 'error');
+    return false;
+  }
+}
+
+// Load from Firebase Cloud
+async function loadFromCloud() {
+  if (!currentUser || !db) return false;
+  
+  try {
+    const doc = await db.collection('user_data').doc(currentUser.uid).get();
+    
+    if (doc.exists) {
+      const cloudData = JSON.parse(doc.data().data);
+      // Merge cloud data with current state
+      state = { ...state, ...cloudData };
+      saveState();
+      showNotification('📥 Loaded from cloud!', 'success');
+      // Trigger page refresh to show new data
+      window.dispatchEvent(new CustomEvent('storyBrainStateUpdated'));
+      return true;
+    } else {
+      // First time user - sync current data to cloud
+      await syncToCloud();
+    }
+  } catch (error) {
+    console.error('Load failed:', error);
+    showNotification('Load failed: ' + error.message, 'error');
+    return false;
+  }
+  return false;
+}
+
+// Auto-sync on state changes (debounced)
+let syncTimeout;
+function autoSyncToCloud() {
+  if (!currentUser) return;
+  
+  clearTimeout(syncTimeout);
+  syncTimeout = setTimeout(() => {
+    syncToCloud();
+  }, 3000); // Wait 3 seconds after last change to sync
+}
+
+// Override saveState to auto-sync
+const originalSaveState = saveState;
+window.saveState = function() {
+  originalSaveState();
+  autoSyncToCloud();
+};
+
+// Update UI to show login/sync buttons
+function updateAuthUI() {
+  const authButtons = document.getElementById('authButtons');
+  if (!authButtons) return;
+  
+  if (currentUser) {
+    const displayName = currentUser.email.split('@')[0];
+    authButtons.innerHTML = `
+      <span class="text-sm text-gray-600 dark:text-gray-300 mr-2 hidden md:inline">👤 ${displayName}</span>
+      <button id="syncCloudBtn" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition" title="Sync to cloud">
+        <span class="material-symbols-outlined">cloud_sync</span>
+      </button>
+      <button id="signOutBtn" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition" title="Sign out">
+        <span class="material-symbols-outlined">logout</span>
+      </button>
+    `;
+    
+    document.getElementById('syncCloudBtn')?.addEventListener('click', () => syncToCloud());
+    document.getElementById('signOutBtn')?.addEventListener('click', signOut);
+  } else {
+    authButtons.innerHTML = `
+      <button id="showAuthModalBtn" class="bg-primary text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-primary/90 transition">
+        Sign In / Sign Up
+      </button>
+    `;
+    document.getElementById('showAuthModalBtn')?.addEventListener('click', showAuthModal);
+  }
+}
+
+// Show login/signup modal
+function showAuthModal() {
+  const modal = document.getElementById('authModal');
+  if (modal) modal.classList.remove('hidden');
+}
+
+function closeAuthModal() {
+  const modal = document.getElementById('authModal');
+  if (modal) modal.classList.add('hidden');
+}
+
+async function handleAuth() {
+  const email = document.getElementById('authEmail').value;
+  const password = document.getElementById('authPassword').value;
+  const isSignUp = document.getElementById('authMode').value === 'signup';
+  
+  if (!email || !password) {
+    showNotification('Please enter email and password', 'error');
+    return;
+  }
+  
+  if (isSignUp) {
+    await signUp(email, password);
+  } else {
+    await signIn(email, password);
+  }
+  
+  closeAuthModal();
 }
 
 // ============================================
@@ -852,6 +625,78 @@ function restoreFromArchive(type, id) {
   }
   if (item) {
     saveState();
+    return true;
+  }
+  return false;
+}
+
+function restoreFromTrash(type, id) {
+  let item = null;
+  switch(type) {
+    case 'project':
+      item = state.trashedProjects?.find(p => p.id === id);
+      if (item) {
+        state.trashedProjects = state.trashedProjects.filter(p => p.id !== id);
+        state.projects.push(item);
+      }
+      break;
+    case 'character':
+      item = state.trashedCharacters?.find(c => c.id === id);
+      if (item) {
+        state.trashedCharacters = state.trashedCharacters.filter(c => c.id !== id);
+        state.characters.push(item);
+      }
+      break;
+    case 'world':
+      item = state.trashedWorldEntries?.find(w => w.id === id);
+      if (item) {
+        state.trashedWorldEntries = state.trashedWorldEntries.filter(w => w.id !== id);
+        state.worldData.push(item);
+      }
+      break;
+    case 'thread':
+      item = state.trashedPlotThreads?.find(t => t.id === id);
+      if (item) {
+        state.trashedPlotThreads = state.trashedPlotThreads.filter(t => t.id !== id);
+        state.plotThreads.push(item);
+      }
+      break;
+  }
+  if (item) {
+    saveState();
+    return true;
+  }
+  return false;
+}
+
+function permanentDelete(type, id) {
+  switch(type) {
+    case 'project':
+      state.trashedProjects = state.trashedProjects?.filter(p => p.id !== id);
+      break;
+    case 'character':
+      state.trashedCharacters = state.trashedCharacters?.filter(c => c.id !== id);
+      break;
+    case 'world':
+      state.trashedWorldEntries = state.trashedWorldEntries?.filter(w => w.id !== id);
+      break;
+    case 'thread':
+      state.trashedPlotThreads = state.trashedPlotThreads?.filter(t => t.id !== id);
+      break;
+  }
+  saveState();
+  showNotification('Item permanently deleted', 'success');
+  return true;
+}
+
+function emptyTrash() {
+  if (confirm('⚠️ PERMANENT DELETE: This will delete ALL items in trash forever. This cannot be undone. Continue?')) {
+    state.trashedProjects = [];
+    state.trashedCharacters = [];
+    state.trashedWorldEntries = [];
+    state.trashedPlotThreads = [];
+    saveState();
+    showNotification('Trash emptied', 'success');
     return true;
   }
   return false;
@@ -1070,39 +915,6 @@ function resetAllData() {
     window.location.reload();
   }
 }
-// Delete forever
-function permanentDelete(type, id) {
-  switch(type) {
-    case 'project':
-      state.trashedProjects = state.trashedProjects?.filter(p => p.id !== id);
-      break;
-    case 'character':
-      state.trashedCharacters = state.trashedCharacters?.filter(c => c.id !== id);
-      break;
-    case 'world':
-      state.trashedWorldEntries = state.trashedWorldEntries?.filter(w => w.id !== id);
-      break;
-    case 'thread':
-      state.trashedPlotThreads = state.trashedPlotThreads?.filter(t => t.id !== id);
-      break;
-  }
-  saveState();
-  showNotification('Item permanently deleted', 'success');
-  return true;
-}
-
-function emptyTrash() {
-  if (confirm('⚠️ PERMANENT DELETE: This will delete ALL items in trash forever. This cannot be undone. Continue?')) {
-    state.trashedProjects = [];
-    state.trashedCharacters = [];
-    state.trashedWorldEntries = [];
-    state.trashedPlotThreads = [];
-    saveState();
-    showNotification('Trash emptied', 'success');
-    return true;
-  }
-  return false;
-}
 
 // Escape HTML for safe display
 function escapeHtml(text) {
@@ -1122,6 +934,11 @@ loadState();
 // Initialize dark mode
 initDarkMode();
 addDarkModeStyles();
+
+// Initialize Firebase (add this to start cloud sync)
+document.addEventListener('DOMContentLoaded', () => {
+  initFirebase();
+});
 
 // Listen for storage events to sync across tabs
 window.addEventListener('storage', (e) => {
@@ -1164,8 +981,17 @@ window.resetAllData = resetAllData;
 window.escapeHtml = escapeHtml;
 window.moveToTrash = moveToTrash;
 window.restoreFromArchive = restoreFromArchive;
+window.restoreFromTrash = restoreFromTrash;
+window.permanentDelete = permanentDelete;
+window.emptyTrash = emptyTrash;
 window.toggleDarkMode = toggleDarkMode;
 window.initDarkMode = initDarkMode;
 window.showNotification = showNotification;
-window.permanentDelete = permanentDelete;
-window.emptyTrash = emptyTrash;
+window.signUp = signUp;
+window.signIn = signIn;
+window.signOut = signOut;
+window.syncToCloud = syncToCloud;
+window.loadFromCloud = loadFromCloud;
+window.showAuthModal = showAuthModal;
+window.closeAuthModal = closeAuthModal;
+window.handleAuth = handleAuth;
