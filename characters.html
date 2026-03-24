@@ -66,6 +66,9 @@
       <div class="flex items-center gap-3">
         <span class="text-sm text-gray-500 flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">sync</span>Auto-saved</span>
         <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]">person</span></div>
+      <button id="darkModeToggle" class="dark-mode-toggle p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+  <span class="material-symbols-outlined">dark_mode</span>
+</button>
       </div>
     </div>
 
@@ -499,6 +502,10 @@
     }
     window.addEventListener('click', (e) => { if (e.target === charModal) charModal.classList.add('hidden'); if (e.target === dynamicModal) dynamicModal.classList.add('hidden'); });
   })();
+</script>
+  <script>
+  // Make sure dark mode toggle works on this page
+  document.getElementById('darkModeToggle')?.addEventListener('click', toggleDarkMode);
 </script>
 </body>
 </html>
